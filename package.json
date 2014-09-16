@@ -1,0 +1,46 @@
+{
+  "name": "adm",
+  "version": "0.0.1",
+  "main": "index.js",
+  "description": "Application Deployment Manager",
+  "homepage": "https://github.com/taoyuan/adm",
+  "bugs": "https://github.com/taoyuan/adm/issues",
+  "author": {
+    "name": "Tao Yuan",
+    "email": "torworx@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taoyuan/adm"
+  },
+  "licenses": [
+    {
+      "type": "MIT"
+    }
+  ],
+  "keywords": [
+    "adm",
+    "node",
+    "application",
+    "deployment",
+    "manager",
+    "install"
+  ],
+  "devDependencies": {
+    "mocha": "^1.21.4",
+    "chai": "*",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-mocha-test": "~0.11.0",
+    "jshint-stylish": "^0.4.0",
+    "load-grunt-tasks": "^0.6.0",
+    "time-grunt": "~1.0.0"
+  },
+  "scripts": {
+    "test": "grunt"
+  }  ,
+  "bin": {
+    "adm": "bin/adm.js"
+  },
+  "preferGlobal": "true"
+}
