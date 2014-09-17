@@ -7,12 +7,11 @@
   "noarg": true,
   "sub": true,
   "undef": true,
-  "unused": true,
+  "unused": false,
   "boss": true,
   "eqnull": true,
   "node": true,
   "globals"   : {
-      /* MOCHA */
       "describe": false,
       "it": false,
       "suite": false,
