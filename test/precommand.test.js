@@ -2,15 +2,15 @@
 
 var path = require('path');
 var t = require('chai').assert;
-var cmdval = require('../lib/cli/cmdval');
+var precommand = require('../lib/cli/precommand');
 var pkg = path.normalize(path.join(__dirname, '..', 'package.json'));
 
-describe('valcmd', function () {
+describe('precommand', function () {
     it('should execute command function', function (done) {
         var cli = require('cli-command')(pkg);
         var args = ['ls', '-v', 'file.txt'];
         cli
-            .configure({command: {before: cmdval}})
+            .configure({command: {before: precommand}})
             .option('-v --verbose', 'print more information')
             .command('ls')
             .usage('ls <file>')
@@ -32,7 +32,7 @@ describe('valcmd', function () {
         var cli = require('cli-command')(pkg);
         var args = ['ls'];
         cli
-            .configure({command: {before: cmdval}})
+            .configure({command: {before: precommand}})
             .option('-v --verbose', 'print more information')
             .command('ls')
             .usage('ls <file>')

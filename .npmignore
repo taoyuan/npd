@@ -11,3 +11,6 @@ npm-debug.log
 .git
 .idea
 jasmine*.js
+temp
+tmp
+adm-registry.json

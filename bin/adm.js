@@ -12,7 +12,7 @@ var cli = require('cli-command')(path.join(__dirname, '..', 'package.json'));
 cli.configure({
     help: {sections: {bugs: 'Report bugs to ' + cli.package().bugs}},
     command: {
-        before: require('../lib/cli/cmdval')
+        before: require('../lib/cli/precommand')
     }
 });
 
