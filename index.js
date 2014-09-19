@@ -1,3 +1,3 @@
 "use strict";
 
-module.exports = require('./lib/adm');
+module.exports = require('./lib/sorb');

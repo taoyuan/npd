@@ -1,17 +1,17 @@
 {
-  "name": "adm",
+  "name": "sorb",
   "version": "0.1.0",
   "main": "index.js",
   "description": "Application Deployment Manager",
-  "homepage": "https://github.com/taoyuan/adm",
-  "bugs": "https://github.com/taoyuan/adm/issues",
+  "homepage": "https://github.com/taoyuan/sorb",
+  "bugs": "https://github.com/taoyuan/sorb/issues",
   "author": {
     "name": "Tao Yuan",
     "email": "torworx@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/taoyuan/adm"
+    "url": "https://github.com/taoyuan/sorb"
   },
   "licenses": [
     {
@@ -19,7 +19,7 @@
     }
   ],
   "keywords": [
-    "adm",
+    "sorb",
     "node",
     "application",
     "deployment",
@@ -58,7 +58,7 @@
     "test": "grunt"
   },
   "bin": {
-    "adm": "bin/adm.js"
+    "sorb": "bin/sorb.js"
   },
   "preferGlobal": "true"
 }
