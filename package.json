@@ -1,6 +1,6 @@
 {
   "name": "noap",
-  "version": "0.1.0",
+  "version": "0.0.2",
   "main": "index.js",
   "description": "Application Deployment Manager",
   "homepage": "https://github.com/taoyuan/noap",
