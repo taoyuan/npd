@@ -5,15 +5,15 @@ var fs = require('fs-extra');
 var t = require('chai').assert;
 var deploy = require('../../lib/commands/deploy');
 
-var apps = process.env.sorb_repo = '/tmp/apps';
+var apps = process.env.noap_repo = '/tmp/noaps';
 
 describe('deploy', function () {
 
     it('should work', function (done) {
 
-        deploy('taoyuan/sorb-example' , function (err, location) {
+        deploy('taoyuan/noap-example' , function (err, location) {
             if (err) return done(err);
-            t.equal(location, path.resolve(apps, 'sorb-example'));
+            t.equal(location, path.resolve(apps, 'noap-example'));
             done();
         });
     });

@@ -1,11 +1,11 @@
-# sorb [![NPM Version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
+# noap [![NPM Version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
-> Application Deployment Manager
+> Node Application manager
 
 ## Installation
 
 ```bash
-$ npm install sorb -g
+$ npm install noap -g
 ```
 
 ## Documentation
@@ -20,8 +20,8 @@ _(Coming soon)_
 
 Copyright (c) 2014 Tao Yuan Licensed under the MIT license.
 
-[npm-url]: https://www.npmjs.org/package/sorb
-[npm-image]: https://img.shields.io/npm/v/sorb.svg?style=flat
+[npm-url]: https://www.npmjs.org/package/noap
+[npm-image]: https://img.shields.io/npm/v/noap.svg?style=flat
 
-[travis-url]: https://travis-ci.org/taoyuan/sorb
-[travis-image]: http://img.shields.io/travis/taoyuan/sorb.svg?style=flat
+[travis-url]: https://travis-ci.org/taoyuan/noap
+[travis-image]: http://img.shields.io/travis/taoyuan/noap.svg?style=flat
