@@ -15,13 +15,14 @@ module.exports = function (grunt) {
                 ui: 'bdd'
             },
             test: {
-                src: ['test/**/*.js']
+                src: ['test/**/*.test.js']
             }
         },
         jshint: {
             options: {
                 jshintrc: '.jshintrc',
-                reporter: require('jshint-stylish')
+                reporter: require('jshint-stylish'),
+                ignores: 'test/fixtures/**'
             },
             gruntfile: {
                 src: 'Gruntfile.js'
@@ -32,6 +33,20 @@ module.exports = function (grunt) {
             test: {
                 src: ['test/**/*.js']
             }
+        },
+        exec: {
+            fixtures: {
+                command: 'node test/packages.js'
+            },
+            'fixtures-force': {
+                command: 'node test/packages.js --force'
+            },
+//            cover: {
+//                command: 'STRICT_REQUIRE=1 node node_modules/istanbul/lib/cli.js cover --dir ./test/reports node_modules/mocha/bin/_mocha -- -R dot test/test.js'
+//            },
+//            coveralls: {
+//                command: 'node node_modules/.bin/coveralls < test/reports/lcov.info'
+//            }
         },
         watch: {
             gruntfile: {
@@ -49,10 +64,12 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.registerTask('test', ['jshint', 'exec:fixtures', 'mochaTest']);
+
     // Default task.
     grunt.registerTask('default', [
 //        'jshint',
-        'mochaTest'
+        'test'
     ]);
 
 };

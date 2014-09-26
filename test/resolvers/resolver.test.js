@@ -93,7 +93,7 @@ describe('Resolver', function () {
         });
 
         beforeEach(function () {
-            fs.writeFileSync(path.join(tempDir, '.noap.json'), JSON.stringify({
+            fs.writeFileSync(path.join(tempDir, '.package.json'), JSON.stringify({
                 name: 'test'
             }));
         });
@@ -167,7 +167,7 @@ describe('Resolver', function () {
         it('should resolve to true if the there\'s an error reading the package meta', function (next) {
             var resolver = create('foo');
 
-            fs.removeSync(path.join(tempDir, '.noap.json'));
+            fs.removeSync(path.join(tempDir, '.package.json'));
             resolver.hasNew(tempDir)
                 .then(function (hasNew) {
                     t.equal(hasNew, true);
@@ -451,7 +451,7 @@ describe('Resolver', function () {
         });
     });
 
-    describe.only('#_createTempDir', function () {
+    describe('#_createTempDir', function () {
         it('should create a directory inside a "username/noap" folder, located within the OS temp folder', function (next) {
             var resolver = create('foo');
 
@@ -515,7 +515,7 @@ describe('Resolver', function () {
                 sh.exec('node', ['test/fixtures/test-temp-dir/test-exception.js'], { cwd: path.resolve(__dirname, '../..') })
                     .then(function () {
                         next(new Error('The command should have failed'));
-                    }, function (err) {
+                    }, function () {
                         t.equal(fs.existsSync(config.tmp), true);
                         t.deepEqual(fs.readdirSync(config.tmp), []);
                         next();
@@ -596,44 +596,17 @@ describe('Resolver', function () {
             fs.remove(tempDir, next);
         });
 
-        it('should read the noap.json file', function (next) {
+        it('should read the package.json file', function (next) {
             var resolver = create('foo');
 
-            mkdirp.sync(tempDir);
-            fs.writeFileSync(path.join(tempDir, 'noap.json'), JSON.stringify({ name: 'foo', version: '0.0.0' }));
-            fs.writeFileSync(path.join(tempDir, 'component.json'), JSON.stringify({ name: 'bar', version: '0.0.0' }));
+            fs.mkdirpSync(tempDir);
+            fs.writeFileSync(path.join(tempDir, 'package.json'), JSON.stringify({ name: 'foo', version: '0.0.0' }));
 
             resolver._readJson(tempDir)
                 .then(function (meta) {
                     t.typeOf(meta, 'object');
                     t.equal(meta.name, 'foo');
                     t.equal(meta.version, '0.0.0');
-                    next();
-                })
-                .done();
-        });
-
-        it('should fallback to component.json (notifying a warn)', function (next) {
-            var resolver = create('foo');
-            var notified = false;
-
-            mkdirp.sync(tempDir);
-            fs.writeFileSync(path.join(tempDir, 'component.json'), JSON.stringify({ name: 'bar', version: '0.0.0' }));
-
-            logger.on('log', function (log) {
-                t.typeOf(log, 'object');
-                if (log.level === 'warn' && /deprecated/i.test(log.id)) {
-                    t.include(log.message, 'component.json');
-                    notified = true;
-                }
-            });
-
-            resolver._readJson(tempDir)
-                .then(function (meta) {
-                    t.typeOf(meta, 'object');
-                    t.equal(meta.name, 'bar');
-                    t.equal(meta.version, '0.0.0');
-                    t.equal(notified, true);
                     next();
                 })
                 .done();
@@ -663,7 +636,7 @@ describe('Resolver', function () {
             var resolver = create('foo');
             var meta = { name: 'foo' };
 
-            mkdirp.sync(tempDir);
+            fs.mkdirpSync(tempDir);
             resolver._tempDir = tempDir;
 
             resolver._applyPkgMeta(meta)
@@ -685,14 +658,14 @@ describe('Resolver', function () {
         it('should remove files that match the ignore patterns excluding main files', function (next) {
             var resolver = create({ source: 'foo', name: 'foo' });
 
-            mkdirp.sync(tempDir);
+            fs.mkdirpSync(tempDir);
 
             // Checkout test package version 0.2.1 which has a noap.json
             // with ignores
-            cmd('git', ['checkout', '0.2.2'], { cwd: testPackage })
+            sh.exec('git', ['checkout', '0.2.2'], { cwd: testPackage })
                 // Copy its contents to the temporary dir
                 .then(function () {
-                    return copy.copyDir(testPackage, tempDir);
+                    return fs.copySync(testPackage, tempDir);
                 })
                 .then(function () {
                     var json;
@@ -700,17 +673,17 @@ describe('Resolver', function () {
                     // This is a very rudimentary check
                     // Complete checks are made in the 'describe' below
                     resolver._tempDir = tempDir;
-                    json = JSON.parse(fs.readFileSync(path.join(tempDir, 'noap.json')).toString());
+                    json = JSON.parse(fs.readFileSync(path.join(tempDir, 'package.json')).toString());
 
                     return resolver._applyPkgMeta(json)
                         .then(function () {
-                            t.equal(fs.existsSync(path.join(tempDir, 'foo')), true);
-                            t.equal(fs.existsSync(path.join(tempDir, 'baz')), true);
-                            t.equal(fs.existsSync(path.join(tempDir, 'test')), false);
-                            t.equal(fs.existsSync(path.join(tempDir, 'noap.json')), true);
-                            t.equal(fs.existsSync(path.join(tempDir, 'main.js')), true);
-                            t.equal(fs.existsSync(path.join(tempDir, 'more/docs')), false);
-                            t.equal(fs.existsSync(path.join(tempDir, 'more/fixtures')), false);
+                            t.ok(fs.existsSync(path.join(tempDir, 'foo')));
+                            t.ok(fs.existsSync(path.join(tempDir, 'baz')));
+                            t.notOk(fs.existsSync(path.join(tempDir, 'test')));
+                            t.ok(fs.existsSync(path.join(tempDir, 'package.json')));
+                            t.ok(fs.existsSync(path.join(tempDir, 'main.js')));
+                            t.ok(fs.existsSync(path.join(tempDir, 'more/docs')));
+                            t.ok(fs.existsSync(path.join(tempDir, 'more/fixtures')));
                             next();
                         });
                 })
@@ -735,11 +708,11 @@ describe('Resolver', function () {
 
     describe('#_savePkgMeta', function () {
         before(function () {
-            mkdirp.sync(tempDir);
+            fs.mkdirpSync(tempDir);
         });
 
         afterEach(function (next) {
-            fs.remove(path.join(tempDir, '.noap.json'), next);
+            fs.remove(path.join(tempDir, '.package.json'), next);
         });
 
         after(function (next) {
@@ -775,14 +748,14 @@ describe('Resolver', function () {
                 .done();
         });
 
-        it('should save the package meta to the package meta file (.noap.json)', function (next) {
+        it('should save the package meta to the package meta file (.package.json)', function (next) {
             var resolver = create('foo');
 
             resolver._tempDir = tempDir;
 
             resolver._savePkgMeta({ name: 'bar' })
                 .then(function (retMeta) {
-                    fs.readFile(path.join(tempDir, '.noap.json'), function (err, contents) {
+                    fs.readFile(path.join(tempDir, '.package.json'), function (err, contents) {
                         if (err) return next(err);
 
                         contents = contents.toString();
@@ -793,31 +766,6 @@ describe('Resolver', function () {
                 .done();
         });
 
-        it('should warn user for missing attributes in noap.json', function (next) {
-            var resolver = create('fooooo');
-            resolver._tempDir = tempDir;
-            var notifiedCount = 0;
-            logger.on('log', function (log) {
-                notifiedCount ++;
-                t.typeOf(log, 'object');
-                t.equal(log.level, 'warn');
-                if (notifiedCount === 1) {
-                    t.include(log.message, 'bar is missing "main" entry in noap.json');
-                } else {
-                    t.include(log.message, 'bar is missing "ignore" entry in noap.json');
-                }
-            });
-            resolver._savePkgMeta({ name: 'bar' });
-            t.equal(notifiedCount, 2);
-
-            resolver._savePkgMeta({ name: 'bar', main: 'foo' });
-            t.equal(notifiedCount, 3);
-
-            // should not warn again
-            resolver._savePkgMeta({ name: 'bar', main: 'flart', ignore: 'blat' });
-            t.equal(notifiedCount, 3);
-            next();
-        });
     });
 
     describe('#isTargetable', function () {

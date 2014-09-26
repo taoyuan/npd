@@ -3,3 +3,7 @@ npm-debug.log
 .idea
 temp
 tmp
+/test/fixtures/package-*/
+/test/fixtures/temp-*/
+/test/reports
+/test/tmp/
