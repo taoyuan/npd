@@ -4,12 +4,11 @@ var fs = require('fs-extra');
 var path = require('path');
 var util = require('util');
 var when = require('when');
-var nfn = require('when/node');
 var tmp = require('tmp');
 var t = require('chai').assert;
 var h = require('../helpers');
-var utils = h.require('lib/utils');
-var sh = h.require('lib/sh');
+var sh = h.require('lib/utils/sh');
+var copy = h.require(('lib/utils/copy'));
 var noapconf = h.require('lib/noapconf');
 var Logger = h.require('lib/logger');
 var Resolver = h.require('lib/resolvers/resolver');
@@ -665,7 +664,7 @@ describe('Resolver', function () {
             sh.exec('git', ['checkout', '0.2.2'], { cwd: testPackage })
                 // Copy its contents to the temporary dir
                 .then(function () {
-                    return fs.copySync(testPackage, tempDir);
+                    return copy.copyDir(testPackage, tempDir);
                 })
                 .then(function () {
                     var json;

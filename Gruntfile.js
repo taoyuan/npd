@@ -40,7 +40,7 @@ module.exports = function (grunt) {
             },
             'fixtures-force': {
                 command: 'node test/packages.js --force'
-            },
+            }
 //            cover: {
 //                command: 'STRICT_REQUIRE=1 node node_modules/istanbul/lib/cli.js cover --dir ./test/reports node_modules/mocha/bin/_mocha -- -R dot test/test.js'
 //            },
@@ -67,9 +67,6 @@ module.exports = function (grunt) {
     grunt.registerTask('test', ['jshint', 'exec:fixtures', 'mochaTest']);
 
     // Default task.
-    grunt.registerTask('default', [
-//        'jshint',
-        'test'
-    ]);
+    grunt.registerTask('default', ['jshint', 'test']);
 
 };

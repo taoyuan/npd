@@ -5,7 +5,7 @@ var when = require('when');
 var nfn = require('when/node');
 var semver = require('semver');
 var chalk = require('chalk');
-var sh = require('../lib/sh');
+var sh = require('../lib/utils/sh');
 var packages = require('./packages.json');
 var nomnom = require('nomnom');
 

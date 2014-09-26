@@ -7,8 +7,7 @@ var uuid = require('node-uuid');
 var fs = require('fs-extra');
 var glob = require('glob');
 var osenv = require("osenv");
-var utils = require('../lib/utils');
-var sh = require('../lib/sh');
+var sh = require('../lib/utils/sh');
 
 var env = {
     'GIT_AUTHOR_DATE': 'Sun Apr 7 22:13:13 2013 +0000',
