@@ -7,7 +7,7 @@ var copy = require('../../lib/utils/copy');
 var GitFsResolver = require('../../lib/resolvers/git-fs-resolver');
 var noapconf = require('../../lib/noapconf');
 
-describe.only('GitFsResolver', function () {
+describe('GitFsResolver', function () {
     var tempSource;
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
     var logger;
