@@ -368,7 +368,7 @@ describe('UrlResolver', function () {
 
             nock('http://bower.io')
                 .get('/package-zip-single-package-json.zip')
-                .replyWithFile(200, path.resolve(__dirname, '../fixtures/package-zip-single-package-json.zip'))
+                .replyWithFile(200, path.resolve(__dirname, '../fixtures/package-zip-single-package-json.zip'));
 
             resolver = create('http://bower.io/package-zip-single-package-json.zip');
 
