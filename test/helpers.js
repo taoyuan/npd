@@ -9,6 +9,7 @@ var glob = require('glob');
 var osenv = require("osenv");
 var sh = require('../lib/utils/sh');
 
+// Those are needed for Travis or not configured git environment
 var env = {
     'GIT_AUTHOR_DATE': 'Sun Apr 7 22:13:13 2013 +0000',
     'GIT_AUTHOR_NAME': 'Yuan Tao',
