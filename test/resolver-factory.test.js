@@ -31,7 +31,7 @@ describe('resolverFactory', function () {
     });
 
     after(function (next) {
-        fs.remove('dejavu', next);
+        fs.remove('docpad', next);
     });
 
     function callFactory(decEndpoint, config) {
@@ -523,28 +523,28 @@ describe('resolverFactory', function () {
     });
 
     it.skip('should recognize registry endpoints correctly', function (next) {
-        // Create a 'dejavu' file at the root to prevent regressions of #666
-        fs.writeFileSync('dejavu', 'foo');
+        // Create a 'docpad' file at the root to prevent regressions of #666
+        fs.writeFileSync('docpad', 'foo');
 
-        callFactory({ source: 'dejavu' })
+        callFactory({ source: 'docpad' })
             .then(function (resolver) {
                 t.instanceOf(resolver, resolvers.GitRemote);
-                t.equal(resolver.getSource(), 'git://github.com/IndigoUnited/dejavu.git');
+                t.equal(resolver.getSource(), 'git://github.com/docpad/docpad.git');
                 t.equal(resolver.getTarget(), '*');
             })
             .then(function () {
                 // Test with name
-                return callFactory({ source: 'dejavu', name: 'foo' })
+                return callFactory({ source: 'docpad', name: 'foo' })
                     .then(function (resolver) {
                         t.instanceOf(resolver, resolvers.GitRemote);
-                        t.equal(resolver.getSource(), 'git://github.com/IndigoUnited/dejavu.git');
+                        t.equal(resolver.getSource(), 'git://github.com/docpad/docpad.git');
                         t.equal(resolver.getName(), 'foo');
                         t.equal(resolver.getTarget(), '*');
                     });
             })
             .then(function () {
                 // Test with target
-                return callFactory({ source: 'dejavu', target: '~2.0.0' })
+                return callFactory({ source: 'docpad', target: '~2.0.0' })
                     .then(function (resolver) {
                         t.instanceOf(resolver, resolvers.GitRemote);
                         t.equal(resolver.getTarget(), '~2.0.0');
@@ -570,7 +570,7 @@ describe('resolverFactory', function () {
     });
 
     it.skip('should set registry to true on the decomposed endpoint if fetched from the registry', function (next) {
-        var decEndpoint = { source: 'dejavu' };
+        var decEndpoint = { source: 'docpad' };
 
         callFactory(decEndpoint)
             .then(function () {
