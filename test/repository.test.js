@@ -13,7 +13,7 @@ var Cache = require('../lib/cache');
 var resolvers = require('../lib/resolvers');
 var copy = require('../lib/utils/copy');
 
-describe.only('Repository', function () {
+describe('Repository', function () {
     var repository;
     var resolver;
     var resolverFactoryHook;
@@ -96,7 +96,7 @@ describe.only('Repository', function () {
 
     describe('.fetch', function () {
         it('should call the resolver factory to get the appropriate resolver', function (next) {
-            var called;
+            var called = false;
 
             resolverFactoryHook = function () {
                 called = true;
@@ -233,7 +233,7 @@ describe.only('Repository', function () {
                 name: 'a',
                 version: '0.2.1'
             };
-            var called;
+            var called = false;
 
             resolverFactoryHook = function (resolver) {
                 var originalHasNew = resolver.hasNew;
@@ -474,7 +474,7 @@ describe.only('Repository', function () {
 
     describe('.eliminate', function () {
         it('should call the eliminate method from the resolve cache', function (next) {
-            var called;
+            var called = false;
             var json = {
                 name: 'a',
                 version: '0.2.0',
@@ -496,7 +496,7 @@ describe.only('Repository', function () {
         });
 
         it('should call the clearCache method with the name from the registry client', function (next) {
-            var called;
+            var called = false;
             var json = {
                 name: 'a',
                 version: '0.2.0',
@@ -520,7 +520,7 @@ describe.only('Repository', function () {
 
     describe('.list', function () {
         it('should proxy to the resolve cache list method', function (next) {
-            var called;
+            var called = false;
             var originalList = repository._cache.list;
 
             repository._cache.list = function () {
@@ -540,7 +540,7 @@ describe.only('Repository', function () {
 
     describe('.clear', function () {
         it('should call the clear method from the resolve cache', function (next) {
-            var called;
+            var called = false;
 
             repository._cache.clear = function () {
                 called = true;
@@ -556,7 +556,7 @@ describe.only('Repository', function () {
         });
 
         it('should call the clearCache method without name from the registry client', function (next) {
-            var called;
+            var called = false;
 
             repository._registry.clearCache = function (callback) {
                 called = true;
@@ -574,7 +574,7 @@ describe.only('Repository', function () {
 
     describe('.reset', function () {
         it('should call the reset method from the resolve cache', function () {
-            var called;
+            var called = false;
 
             repository._cache.reset = function () {
                 called = true;
@@ -586,7 +586,7 @@ describe.only('Repository', function () {
         });
 
         it('should call the resetCache method without name from the registry client', function () {
-            var called;
+            var called = false;
 
             repository._registry.resetCache = function () {
                 called = true;
@@ -598,21 +598,21 @@ describe.only('Repository', function () {
         });
     });
 
-    describe('.getRegistryClient', function () {
+    describe('.getRegistry', function () {
         it('should return the underlying registry client', function () {
-            t.instanceOf(repository.getRegistryClient(), Registry);
+            t.instanceOf(repository.getRegistry(), Registry);
         });
     });
 
-    describe('.getResolveCache', function () {
+    describe('.getCache', function () {
         it('should return the underlying resolve cache', function () {
-            t.instanceOf(repository.getResolveCache(), Cache);
+            t.instanceOf(repository.getCache(), Cache);
         });
     });
 
     describe('#clearRuntimeCache', function () {
         it('should clear the resolve cache runtime cache', function () {
-            var called;
+            var called = false;
             var originalClearRuntimeCache = Cache.clearRuntimeCache;
 
             // No need to restore the original method since the constructor
@@ -627,7 +627,7 @@ describe.only('Repository', function () {
         });
 
         it('should clear the resolver factory runtime cache', function () {
-            var called;
+            var called = false;
 
             resolverFactoryClearHook = function () {
                 called = true;
@@ -638,7 +638,7 @@ describe.only('Repository', function () {
         });
 
         it('should clear the registry runtime cache', function () {
-            var called;
+            var called = false;
             var originalClearRuntimeCache = Registry.clearRuntimeCache;
 
             // No need to restore the original method since the constructor
