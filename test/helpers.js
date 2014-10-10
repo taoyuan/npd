@@ -54,6 +54,7 @@ exports.TempDir = function (defaults) {
 function TempDir (defaults) {
     this.path = path.join(tmpLocation, uuid.v4());
     this.defaults = defaults;
+    console.log(this.path);
 }
 
 TempDir.prototype.create = function (files) {
@@ -84,15 +85,17 @@ TempDir.prototype.prepare = function (files) {
     return this;
 };
 
-// TODO: Rewrite to synchronous form
-TempDir.prototype.prepareGit = function (revisions) {
-    var that = this;
-
-    revisions = _.defaults(revisions || {}, this.defaults);
-
+TempDir.prototype.gitPrepare = function (revisions) {
     fs.removeSync(this.path);
     fs.mkdirpSync(this.path);
 
+    this.gitCommit(revisions);
+    return this;
+};
+
+TempDir.prototype.gitCommit = function (revisions) {
+    var that = this;
+    revisions = _.defaults(revisions || {}, this.defaults);
     _.forEach(revisions, function (files, tag) {
         that.git('init');
 
@@ -128,4 +131,8 @@ TempDir.prototype.git = function () {
 
 TempDir.prototype.exists = function (name) {
     return fs.existsSync(path.join(this.path, name));
+};
+
+TempDir.prototype.remove = function (name) {
+    return fs.removeSync(path.join(this.path, name));
 };

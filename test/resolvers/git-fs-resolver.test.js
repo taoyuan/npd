@@ -32,12 +32,12 @@ describe('GitFsResolver', function () {
         GitFsResolver.clearRuntimeCache();
     }
 
-    function create(decEndpoint) {
-        if (typeof decEndpoint === 'string') {
-            decEndpoint = { source: decEndpoint };
+    function create(endpoint) {
+        if (typeof endpoint === 'string') {
+            endpoint = { source: endpoint };
         }
 
-        return new GitFsResolver(decEndpoint, config, logger);
+        return new GitFsResolver(endpoint, config, logger);
     }
 
     describe('.constructor', function () {

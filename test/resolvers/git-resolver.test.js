@@ -30,12 +30,12 @@ describe('GitResolver', function () {
         GitResolver.clearRuntimeCache();
     }
 
-    function create(decEndpoint) {
-        if (typeof decEndpoint === 'string') {
-            decEndpoint = { source: decEndpoint };
+    function create(endpoint) {
+        if (typeof endpoint === 'string') {
+            endpoint = { source: endpoint };
         }
 
-        return new GitResolver(decEndpoint, config, logger);
+        return new GitResolver(endpoint, config, logger);
     }
 
     describe('misc', function () {

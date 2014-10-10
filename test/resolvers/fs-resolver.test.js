@@ -34,12 +34,12 @@ describe('FsResolver', function () {
         }
     });
 
-    function create(decEndpoint) {
-        if (typeof decEndpoint === 'string') {
-            decEndpoint = { source: decEndpoint };
+    function create(endpoint) {
+        if (typeof endpoint === 'string') {
+            endpoint = { source: endpoint };
         }
 
-        return new FsResolver(decEndpoint, config, logger);
+        return new FsResolver(endpoint, config, logger);
     }
 
     describe('.constructor', function () {

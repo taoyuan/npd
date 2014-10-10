@@ -34,8 +34,8 @@ describe('resolverFactory', function () {
         fs.remove('docpad', next);
     });
 
-    function callFactory(decEndpoint, config) {
-        return resolverFactory(decEndpoint, noapconf(config).load(), logger, registryClient);
+    function callFactory(endpoint, config) {
+        return resolverFactory(endpoint, noapconf(config).load(), logger, registryClient);
     }
 
     it('should recognize git remote endpoints correctly', function (next) {
@@ -570,11 +570,11 @@ describe('resolverFactory', function () {
     });
 
     it.skip('should set registry to true on the decomposed endpoint if fetched from the registry', function (next) {
-        var decEndpoint = { source: 'docpad' };
+        var endpoint = { source: 'docpad' };
 
-        callFactory(decEndpoint)
+        callFactory(endpoint)
             .then(function () {
-                t.isTrue(decEndpoint.registry);
+                t.isTrue(endpoint.registry);
                 next();
             })
             .done();

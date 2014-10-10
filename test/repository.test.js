@@ -44,15 +44,15 @@ describe('Repository', function () {
         }).load();
 
         // Mock the resolver factory to always return a resolver for the test package
-        function resolverFactory(decEndpoint, _config, _logger, _registry) {
+        function resolverFactory(endpoint, _config, _logger, _registry) {
             t.deepEqual(_config, config);
             t.instanceOf(_logger, Logger);
             t.instanceOf(_registry, Registry);
 
-            decEndpoint = mout.object.deepMixIn({}, decEndpoint);
-            decEndpoint.source = mockSource;
+            endpoint = mout.object.deepMixIn({}, endpoint);
+            endpoint.source = mockSource;
 
-            resolver = new resolvers.GitRemote(decEndpoint, _config, _logger);
+            resolver = new resolvers.GitRemote(endpoint, _config, _logger);
 
             if (forceCaching) {
                 // Force to use cache even for local resources
