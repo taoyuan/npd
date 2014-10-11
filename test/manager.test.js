@@ -5,7 +5,7 @@ var path = require('path');
 var fs = require('fs-extra');
 var Logger = require('../lib/logger');
 var Manager = require('../lib/manager');
-var noapconf = require('../lib/noapconf');
+var npdconf = require('../lib/npdconf');
 
 describe('Manager', function () {
     var manager;
@@ -24,7 +24,7 @@ describe('Manager', function () {
     beforeEach(function (next) {
         var logger = new Logger();
 
-        var config = noapconf({
+        var config = npdconf({
             storage: {
                 packages: packagesCacheDir,
                 registry: registryCacheDir

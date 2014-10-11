@@ -9,13 +9,13 @@ var mout = require('mout');
 var Logger = require('../../lib/logger');
 var copy = require('../../lib/utils/copy');
 var GitResolver = require('../../lib/resolvers/git-resolver');
-var noapconf = require('../../lib/noapconf');
+var npdconf = require('../../lib/npdconf');
 
 describe('GitResolver', function () {
     var tempDir = path.resolve(__dirname, '../tmp/tmp');
     var originalrefs = GitResolver.refs;
     var logger;
-    var config = noapconf().load();
+    var config = npdconf().load();
 
     before(function () {
         logger = new Logger();

@@ -8,7 +8,7 @@ var fs = require('fs-extra');
 var Registry = require('../lib/registry');
 var Logger = require('../lib/logger');
 var proxyquire = require('proxyquire');
-var noapconf = require('../lib/noapconf');
+var npdconf = require('../lib/npdconf');
 var Cache = require('../lib/cache');
 var resolvers = require('../lib/resolvers');
 var copy = require('../lib/utils/copy');
@@ -36,7 +36,7 @@ describe('Repository', function () {
         var logger = new Logger();
 
         // Config
-        config = noapconf({
+        config = npdconf({
             storage: {
                 packages: packagesCacheDir,
                 registry: registryCacheDir

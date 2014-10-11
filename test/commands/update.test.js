@@ -51,7 +51,7 @@ describe('command/update', function () {
         pkg.prepare();
 
         repodir.prepare({
-            '.noaprc': ini.encode({
+            '.npdrc': ini.encode({
                 scripts: {
                     postinstall: 'bash -c "echo -n % > postinstall.txt"'
                 }
@@ -81,7 +81,7 @@ describe('command/update', function () {
 
     it('runs preinstall hook when updating a package', function () {
         repodir.prepare({
-            '.noaprc': ini.encode({
+            '.npdrc': ini.encode({
                 scripts: {
                     preinstall: 'bash -c "echo -n % > preinstall.txt"'
                 }
@@ -102,7 +102,7 @@ describe('command/update', function () {
 
     it('runs postinstall hook when updating a package', function () {
         repodir.prepare({
-            '.noaprc': ini.encode({
+            '.npdrc': ini.encode({
                 scripts: {
                     postinstall: 'bash -c "echo -n % > postinstall.txt"'
                 }

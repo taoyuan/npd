@@ -5,13 +5,13 @@ var Logger = require('../../lib/logger');
 var sh = require('../../lib/utils/sh');
 var copy = require('../../lib/utils/copy');
 var GitFsResolver = require('../../lib/resolvers/git-fs-resolver');
-var noapconf = require('../../lib/noapconf');
+var npdconf = require('../../lib/npdconf');
 
 describe('GitFsResolver', function () {
     var tempSource;
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
     var logger;
-    var config = noapconf().load();
+    var config = npdconf().load();
 
     before(function () {
         logger = new Logger();

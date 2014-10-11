@@ -1,3 +1,3 @@
 "use strict";
 
-module.exports = require('./lib/noap');
+module.exports = require('./lib/npd');

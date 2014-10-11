@@ -32,11 +32,11 @@ describe('command/install', function () {
         });
     });
 
-    it('reads .noaprc from cwd', function () {
+    it('reads .npdrc from cwd', function () {
         pkg.prepare({ foo: 'bar' });
 
         repodir.prepare({
-            '.noaprc': ini.encode({repo: repodir.path})
+            '.npdrc': ini.encode({repo: repodir.path})
         });
 
         return install([pkg.path]).then(function () {
@@ -49,7 +49,7 @@ describe('command/install', function () {
         pkg.prepare();
 
         repodir.prepare({
-            '.noaprc': ini.encode({
+            '.npdrc': ini.encode({
                 scripts: {
                     preinstall: 'bash -c "echo -n % > preinstall.txt"'
                 }
@@ -65,7 +65,7 @@ describe('command/install', function () {
         pkg.prepare();
 
         repodir.prepare({
-            '.noaprc': ini.encode({
+            '.npdrc': ini.encode({
                 scripts: {
                     postinstall: 'bash -c "echo -n % > postinstall.txt"'
                 }
@@ -81,7 +81,7 @@ describe('command/install', function () {
     // To be discussed, but that's the implementation now
     it('does not run hooks if nothing is installed', function () {
         repodir.prepare({
-            '.noaprc': ini.encode({
+            '.npdrc': ini.encode({
                 scripts: {
                     postinstall: 'bash -c "echo -n % > hooks.txt"',
                     preinstall: 'bash -c "echo -n % > hooks.txt"'
@@ -98,7 +98,7 @@ describe('command/install', function () {
         pkg.prepare();
 
         repodir.prepare({
-            '.noaprc': ini.encode({
+            '.npdrc': ini.encode({
                 scripts: {
                     postinstall: 'bash -c "echo foobar"'
                 }

@@ -1,11 +1,11 @@
-# noap [![NPM Version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
+# npd [![NPM Version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
-> Node Application manager
+> Node Packages Deployer
 
 ## Installation
 
 ```bash
-$ npm install noap -g
+$ npm install npd -g
 ```
 
 ## Documentation
@@ -20,8 +20,8 @@ _(Coming soon)_
 
 Copyright (c) 2014 Tao Yuan Licensed under the MIT license.
 
-[npm-url]: https://www.npmjs.org/package/noap
-[npm-image]: https://img.shields.io/npm/v/noap.svg?style=flat
+[npm-url]: https://www.npmjs.org/package/npd
+[npm-image]: https://img.shields.io/npm/v/npd.svg?style=flat
 
-[travis-url]: https://travis-ci.org/taoyuan/noap
-[travis-image]: http://img.shields.io/travis/taoyuan/noap.svg?style=flat
+[travis-url]: https://travis-ci.org/taoyuan/npd
+[travis-image]: http://img.shields.io/travis/taoyuan/npd.svg?style=flat

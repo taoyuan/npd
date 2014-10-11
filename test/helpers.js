@@ -9,7 +9,7 @@ var fs = require('fs-extra');
 var glob = require('glob');
 var osenv = require("osenv");
 var sh = require('../lib/utils/sh');
-var noap = require('../lib/noap');
+var npd = require('../lib/npd');
 var Repository = require('../lib/repository');
 
 // Those are needed for Travis or not configured git environment
@@ -25,7 +25,7 @@ var env = {
 // Preserve the original environment
 _.assign(env, process.env);
 
-var tmpLocation = path.join(osenv.tmpdir(), 'noap-tests', uuid.v4().slice(0, 8));
+var tmpLocation = path.join(osenv.tmpdir(), 'npd-tests', uuid.v4().slice(0, 8));
 
 exports.require = function (name) {
     return require(path.join(__dirname, '../', name));
@@ -52,7 +52,7 @@ exports.expectEvent = function (emitter, eventName) {
 exports.command = function (cmd, options) {
     return function (packages, config) {
         config = object.merge(config || {}, options);
-        var logger = noap.commands[cmd](packages, config);
+        var logger = npd.commands[cmd](packages, config);
         return exports.expectEvent(logger, 'end');
     }
 };
@@ -60,7 +60,7 @@ exports.command = function (cmd, options) {
 exports.commandForLogger = function (cmd, options) {
     return function (packages, config) {
         config = object.merge(config || {}, options);
-        return noap.commands[cmd](packages, config);
+        return npd.commands[cmd](packages, config);
     }
 };
 

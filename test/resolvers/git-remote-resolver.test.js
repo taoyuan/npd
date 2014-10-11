@@ -3,12 +3,12 @@ var path = require('path');
 var fs = require('fs-extra');
 var Logger = require('../../lib/logger');
 var GitRemoteResolver = require('../../lib/resolvers/git-remote-resolver');
-var noapconf = require('../../lib/noapconf');
+var npdconf = require('../../lib/npdconf');
 
 describe('GitRemoteResolver', function () {
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
     var logger;
-    var config = noapconf().load();
+    var config = npdconf().load();
 
     before(function () {
         logger = new Logger();

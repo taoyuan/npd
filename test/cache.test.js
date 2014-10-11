@@ -5,7 +5,7 @@ var fs = require('fs-extra');
 var when = require('when');
 var nfn = require('when/node');
 var Cache = require('../lib/cache');
-var noapconf = require('../lib/noapconf');
+var npdconf = require('../lib/npdconf');
 var sh = require('../lib/utils/sh');
 var copy = require('../lib/utils/copy');
 var md5 = require('../lib/utils/md5');
@@ -22,7 +22,7 @@ describe('Cache', function () {
         fs.removeSync(cacheDir);
 
         // Instantiate resolver cache
-        cache = new Cache(noapconf({
+        cache = new Cache(npdconf({
             storage: {
                 packages: cacheDir
             }
@@ -54,7 +54,7 @@ describe('Cache', function () {
         });
 
         function initialize(cacheDir) {
-            return new Cache(noapconf({
+            return new Cache(npdconf({
                 storage: {
                     packages: cacheDir
                 }

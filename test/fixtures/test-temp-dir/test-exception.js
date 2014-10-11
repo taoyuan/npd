@@ -1,10 +1,10 @@
 var fs = require('fs-extra');
 var path = require('path');
-var noapconf = require('../../../lib/noapconf');
+var npdconf = require('../../../lib/npdconf');
 var Logger = require('../../../lib/logger');
 var Resolver = require('../../../lib/resolvers/Resolver');
 
-var resolver = new Resolver({ source: 'foo' }, noapconf().load(), new Logger());
+var resolver = new Resolver({ source: 'foo' }, npdconf().load(), new Logger());
 resolver._createTempDir()
     .then(function (dir) {
         // Need to write something to prevent tmp to automatically

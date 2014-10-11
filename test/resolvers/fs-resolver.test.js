@@ -6,14 +6,14 @@ var nfn = require('when/node');
 var Logger = require('../../lib/logger');
 var sh = require('../../lib/utils/sh');
 var copy = require('../../lib/utils/copy');
-var noapconf = require('../../lib/noapconf');
+var npdconf = require('../../lib/npdconf');
 var FsResolver = require('../../lib/resolvers/fs-resolver');
 
 describe('FsResolver', function () {
     var tempSource;
     var logger;
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
-    var config = noapconf().load();
+    var config = npdconf().load();
 
     before(function (next) {
         logger = new Logger();

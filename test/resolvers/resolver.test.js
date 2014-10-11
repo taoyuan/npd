@@ -9,7 +9,7 @@ var t = require('chai').assert;
 var h = require('../helpers');
 var sh = h.require('lib/utils/sh');
 var copy = h.require(('lib/utils/copy'));
-var noapconf = h.require('lib/noapconf');
+var npdconf = h.require('lib/npdconf');
 var Logger = h.require('lib/logger');
 var Resolver = h.require('lib/resolvers/resolver');
 
@@ -19,7 +19,7 @@ describe('Resolver', function () {
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
     var logger;
     var dirMode0777;
-    var config = noapconf().load();
+    var config = npdconf().load();
 
     before(function () {
         var stat;
@@ -451,7 +451,7 @@ describe('Resolver', function () {
     });
 
     describe('#_createTempDir', function () {
-        it('should create a directory inside a "username/noap" folder, located within the OS temp folder', function (next) {
+        it('should create a directory inside a "username/npd" folder, located within the OS temp folder', function (next) {
             var resolver = create('foo');
 
             resolver._createTempDir()
@@ -468,7 +468,7 @@ describe('Resolver', function () {
                     t.equal(dir.indexOf(osTempDir), 0);
                     t.equal(dir.indexOf(config.tmp), 0);
 
-                    t.equal(path.basename(dirname), 'noap');
+                    t.equal(path.basename(dirname), 'npd');
                     t.equal(path.dirname(path.dirname(dirname)), osTempDir);
                     next();
                 })
@@ -659,7 +659,7 @@ describe('Resolver', function () {
 
             fs.mkdirpSync(tempDir);
 
-            // Checkout test package version 0.2.1 which has a noap.json
+            // Checkout test package version 0.2.1 which has a npd.json
             // with ignores
             sh.exec('git', ['checkout', '0.2.2'], { cwd: testPackage })
                 // Copy its contents to the temporary dir

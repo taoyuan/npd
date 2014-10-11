@@ -1,8 +1,8 @@
 "use strict";
 
-process.env.noap_root = '/tmp';
-process.env.noap_repo = '/tmp';
+process.env.npd_root = '/tmp';
+process.env.npd_repo = '/tmp';
 
-cli(['install', 'taoyuan/noap-example'], function () {
+cli(['install', 'taoyuan/npd-example'], function () {
     console.log('done');
 });

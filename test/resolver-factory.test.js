@@ -9,13 +9,13 @@ var RegistryClient = require('../lib/registry');
 var Logger = require('../lib/logger');
 var resolverFactory = require('../lib/resolver-factory');
 var resolvers = require('../lib/resolvers');
-var noapconf = require('../lib/noapconf');
+var npdconf = require('../lib/npdconf');
 
 describe('resolverFactory', function () {
     var tempSource;
     var logger = new Logger();
-    var config = noapconf().load();
-    var registryClient = new RegistryClient(noapconf({
+    var config = npdconf().load();
+    var registryClient = new RegistryClient(npdconf({
         cache: config._registry
     }).load());
 
@@ -35,7 +35,7 @@ describe('resolverFactory', function () {
     });
 
     function callFactory(endpoint, config) {
-        return resolverFactory(endpoint, noapconf(config).load(), logger, registryClient);
+        return resolverFactory(endpoint, npdconf(config).load(), logger, registryClient);
     }
 
     it('should recognize git remote endpoints correctly', function (next) {

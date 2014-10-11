@@ -9,13 +9,13 @@ var nfn = require('when/node');
 var Logger = require('../../lib/logger');
 var sh = require('../../lib/utils/sh');
 var UrlResolver = require('../../lib/resolvers/url-resolver');
-var noapconf = require('../../lib/noapconf');
+var npdconf = require('../../lib/npdconf');
 
 describe('UrlResolver', function () {
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
     var tempDir = path.resolve(__dirname, '../tmp/tmp');
     var logger;
-    var config = noapconf().load();
+    var config = npdconf().load();
 
     before(function (next) {
         logger = new Logger();

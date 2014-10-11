@@ -5,12 +5,12 @@ var fs = require('fs-extra');
 var Logger = require('../../lib/logger');
 var GitRemoteResolver = require('../../lib/resolvers/git-remote-resolver');
 var GitHubResolver = require('../../lib/resolvers/github-resolver');
-var noapconf = require('../../lib/noapconf');
+var npdconf = require('../../lib/npdconf');
 
 describe('GitHub', function () {
     var logger;
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
-    var config = noapconf({ strictSsl: false }).load();
+    var config = npdconf({ strictSsl: false }).load();
 
     before(function () {
         logger = new Logger();
