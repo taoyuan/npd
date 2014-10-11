@@ -10,6 +10,7 @@ var glob = require('glob');
 var osenv = require("osenv");
 var sh = require('../lib/utils/sh');
 var npd = require('../lib/npd');
+var npdconf = require('../lib/npdconf');
 var Repository = require('../lib/repository');
 
 // Those are needed for Travis or not configured git environment
@@ -51,7 +52,9 @@ exports.expectEvent = function (emitter, eventName) {
 
 exports.command = function (cmd, options) {
     return function (packages, config) {
-        config = object.merge(config || {}, options);
+        if (!(config instanceof npdconf.Configure)) {
+            config = object.merge(options || {}, config);
+        }
         var logger = npd.commands[cmd](packages, config);
         return exports.expectEvent(logger, 'end');
     }
@@ -59,7 +62,9 @@ exports.command = function (cmd, options) {
 
 exports.commandForLogger = function (cmd, options) {
     return function (packages, config) {
-        config = object.merge(config || {}, options);
+        if (!(config instanceof npdconf.Configure)) {
+            config = object.merge(options || {}, config);
+        }
         return npd.commands[cmd](packages, config);
     }
 };
