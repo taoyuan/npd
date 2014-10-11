@@ -2,12 +2,15 @@
 
 var when = require('when');
 var _ = require('lodash');
+var object = require('mout').object;
 var path = require('path');
 var uuid = require('node-uuid');
 var fs = require('fs-extra');
 var glob = require('glob');
 var osenv = require("osenv");
 var sh = require('../lib/utils/sh');
+var noap = require('../lib/noap');
+var Repository = require('../lib/repository');
 
 // Those are needed for Travis or not configured git environment
 var env = {
@@ -28,10 +31,9 @@ exports.require = function (name) {
     return require(path.join(__dirname, '../', name));
 };
 
-// We need to reset cache because tests are reusing temp directories
-beforeEach(function () {
-//    config.reset();
-});
+exports.clearRuntimeCache = function () {
+    Repository.clearRuntimeCache();
+};
 
 after(function () {
     fs.removeSync(tmpLocation);
@@ -47,6 +49,21 @@ exports.expectEvent = function (emitter, eventName) {
     return deferred.promise;
 };
 
+exports.command = function (cmd, options) {
+    return function (packages, config) {
+        config = object.merge(config || {}, options);
+        var logger = noap.commands[cmd](packages, config);
+        return exports.expectEvent(logger, 'end');
+    }
+};
+
+exports.commandForLogger = function (cmd, options) {
+    return function (packages, config) {
+        config = object.merge(config || {}, options);
+        return noap.commands[cmd](packages, config);
+    }
+};
+
 exports.TempDir = function (defaults) {
     return new TempDir(defaults);
 };
@@ -54,7 +71,6 @@ exports.TempDir = function (defaults) {
 function TempDir (defaults) {
     this.path = path.join(tmpLocation, uuid.v4());
     this.defaults = defaults;
-    console.log(this.path);
 }
 
 TempDir.prototype.create = function (files) {

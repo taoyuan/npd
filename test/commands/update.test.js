@@ -2,26 +2,29 @@ require('chai').config.includeStack = true;
 var t = require('chai').assert;
 var object = require('mout').object;
 var ini = require('ini');
-var helpers = require('../helpers');
-var noap = helpers.require('lib/noap');
-var commands = noap.commands;
+var h = require('../helpers');
 
 describe('command/update', function () {
 
     var repodir, pkg, gitpkg;
+    var install, update, updateLogger;
 
     before(function () {
-        repodir = new helpers.TempDir();
+        repodir = new h.TempDir();
 
-        pkg = new helpers.TempDir().prepare({
+        pkg = new h.TempDir().prepare({
             'package.json': {
                 name: 'package'
             }
         });
 
-        gitpkg = new helpers.TempDir();
-    });
+        gitpkg = new h.TempDir();
 
+        var opts = { cwd: repodir.path };
+        install = h.command('install', opts);
+        update = h.command('update', opts);
+        updateLogger = h.commandForLogger('update', opts);
+    });
 
     var gitInitialCommit = function () {
         gitpkg.gitPrepare({
@@ -42,32 +45,6 @@ describe('command/update', function () {
                 'version.txt': '1.0.1'
             }
         });
-    };
-
-    var updateLogger = function(packages, config) {
-        config = object.merge(config || {}, {
-            cwd: repodir.path
-        });
-
-        return commands.update(packages, config);
-    };
-
-    var update = function(packages, config) {
-        var logger = updateLogger(packages, config);
-
-        return helpers.expectEvent(logger, 'end');
-    };
-
-    var install = function(packages, config) {
-        config = object.merge(config || {}, {
-            cwd: repodir.path
-        });
-
-        var logger = commands.install(
-            packages, config
-        );
-
-        return helpers.expectEvent(logger, 'end');
     };
 
     it('should not runs postinstall when no package is update', function () {

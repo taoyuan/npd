@@ -5,38 +5,32 @@ var t = require('chai').assert;
 var ini = require('ini');
 var object = require('mout').object;
 var path = require('path');
-var helpers = require('../helpers');
-var noap = helpers.require('lib/noap');
-var commands = noap.commands;
+var h = require('../helpers');
 
 describe('command/install', function () {
 
     var repodir, pkg, gitpkg;
+    var install, installLogger;
 
     before(function () {
-        repodir = new helpers.TempDir();
+        repodir = new h.TempDir();
 
-        pkg = new helpers.TempDir({
+        pkg = new h.TempDir({
             'package.json': {
                 name: 'package'
             }
         }).prepare();
 
-        gitpkg = new helpers.TempDir();
-    });
+        gitpkg = new h.TempDir();
 
-    var installLogger = function (packages, config) {
-        config = object.merge(config || {}, {
+        install = h.command('install', {
             cwd: repodir.path
         });
-        return commands.install(packages, config);
-    };
 
-    var install = function (packages, config) {
-        var logger = installLogger(packages, config);
-        return helpers.expectEvent(logger, 'end');
-    };
-
+        installLogger = h.commandForLogger('install', {
+            cwd: repodir.path
+        });
+    });
 
     it('reads .noaprc from cwd', function () {
         pkg.prepare({ foo: 'bar' });
