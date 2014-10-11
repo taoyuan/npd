@@ -4,7 +4,7 @@ var npdconf = require('../../../lib/npdconf');
 var Logger = require('../../../lib/logger');
 var Resolver = require('../../../lib/resolvers/Resolver');
 
-var resolver = new Resolver({ source: 'foo' }, npdconf().load(), new Logger());
+var resolver = new Resolver({ source: 'foo' }, npdconf(), new Logger());
 resolver._createTempDir()
     .then(function (dir) {
         // Need to write something to prevent tmp to automatically

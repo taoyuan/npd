@@ -15,7 +15,7 @@ describe('UrlResolver', function () {
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
     var tempDir = path.resolve(__dirname, '../tmp/tmp');
     var logger;
-    var config = npdconf().load();
+    var config = npdconf();
 
     before(function (next) {
         logger = new Logger();

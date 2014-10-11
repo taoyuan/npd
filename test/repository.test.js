@@ -41,7 +41,7 @@ describe('Repository', function () {
                 packages: packagesCacheDir,
                 registry: registryCacheDir
             }
-        }).load();
+        });
 
         // Mock the resolver factory to always return a resolver for the test package
         function resolverFactory(endpoint, _config, _logger, _registry) {

@@ -10,7 +10,7 @@ var npdconf = require('../../lib/npdconf');
 describe('GitHub', function () {
     var logger;
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
-    var config = npdconf({ strictSsl: false }).load();
+    var config = npdconf({ strictSsl: false });
 
     before(function () {
         logger = new Logger();

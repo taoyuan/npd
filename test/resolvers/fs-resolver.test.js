@@ -13,7 +13,7 @@ describe('FsResolver', function () {
     var tempSource;
     var logger;
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
-    var config = npdconf().load();
+    var config = npdconf();
 
     before(function (next) {
         logger = new Logger();
@@ -59,7 +59,7 @@ describe('FsResolver', function () {
             t.equal(resolver.getSource(), testPackage);
         });
 
-        it.skip('should use config.cwd for resolving relative paths');
+        it.skip('should use config.dir for resolving relative paths');
 
         it('should error out if a target was specified', function (next) {
             var resolver;

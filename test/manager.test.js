@@ -29,7 +29,7 @@ describe('Manager', function () {
                 packages: packagesCacheDir,
                 registry: registryCacheDir
             }
-        }).load();
+        });
 
         manager = new Manager(config, logger);
 

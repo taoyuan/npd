@@ -14,10 +14,10 @@ var npdconf = require('../lib/npdconf');
 describe('resolverFactory', function () {
     var tempSource;
     var logger = new Logger();
-    var config = npdconf().load();
+    var config = npdconf();
     var registryClient = new RegistryClient(npdconf({
         cache: config._registry
-    }).load());
+    }));
 
     afterEach(function (next) {
         logger.removeAllListeners();
@@ -35,7 +35,7 @@ describe('resolverFactory', function () {
     });
 
     function callFactory(endpoint, config) {
-        return resolverFactory(endpoint, npdconf(config).load(), logger, registryClient);
+        return resolverFactory(endpoint, npdconf(config), logger, registryClient);
     }
 
     it('should recognize git remote endpoints correctly', function (next) {
@@ -625,7 +625,7 @@ describe('resolverFactory', function () {
             .done();
     });
 
-    it.skip('should use config.cwd when resolving relative paths');
+    it.skip('should use config.dir when resolving relative paths');
 
     it('should not swallow constructor errors when instantiating resolvers', function (next) {
         var promise = when.resolve();

@@ -11,7 +11,7 @@ describe('GitFsResolver', function () {
     var tempSource;
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
     var logger;
-    var config = npdconf().load();
+    var config = npdconf();
 
     before(function () {
         logger = new Logger();
@@ -63,7 +63,7 @@ describe('GitFsResolver', function () {
             t.equal(resolver.getSource(), testPackage);
         });
 
-        it.skip('should use config.cwd for resolving relative paths');
+        it.skip('should use config.dir for resolving relative paths');
     });
 
     describe('.resolve', function () {

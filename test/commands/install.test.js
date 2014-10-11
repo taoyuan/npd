@@ -17,7 +17,10 @@ describe('command/install', function () {
 
         pkg = new h.TempDir({
             'package.json': {
-                name: 'package'
+                name: 'package',
+                dependencies: {
+                    lodash: 'latest'
+                }
             }
         }).prepare();
 
@@ -36,7 +39,7 @@ describe('command/install', function () {
         pkg.prepare({ foo: 'bar' });
 
         repodir.prepare({
-            '.npdrc': ini.encode({repo: repodir.path})
+            '.npdrc': ini.encode({dir: repodir.path})
         });
 
         return install([pkg.path]).then(function () {

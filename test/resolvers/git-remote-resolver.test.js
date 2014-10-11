@@ -8,7 +8,7 @@ var npdconf = require('../../lib/npdconf');
 describe('GitRemoteResolver', function () {
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
     var logger;
-    var config = npdconf().load();
+    var config = npdconf();
 
     before(function () {
         logger = new Logger();

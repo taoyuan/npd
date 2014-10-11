@@ -12,11 +12,7 @@ describe('command/update', function () {
     before(function () {
         repodir = new h.TempDir();
 
-        pkg = new h.TempDir().prepare({
-            'package.json': {
-                name: 'package'
-            }
-        });
+        pkg = new h.TempDir();
 
         gitpkg = new h.TempDir();
 
@@ -48,7 +44,11 @@ describe('command/update', function () {
     };
 
     it('should not runs postinstall when no package is update', function () {
-        pkg.prepare();
+        pkg.prepare({
+            'package.json': {
+                name: 'package'
+            }
+        });
 
         repodir.prepare({
             '.npdrc': ini.encode({

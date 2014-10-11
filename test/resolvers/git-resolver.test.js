@@ -15,7 +15,7 @@ describe('GitResolver', function () {
     var tempDir = path.resolve(__dirname, '../tmp/tmp');
     var originalrefs = GitResolver.refs;
     var logger;
-    var config = npdconf().load();
+    var config = npdconf();
 
     before(function () {
         logger = new Logger();

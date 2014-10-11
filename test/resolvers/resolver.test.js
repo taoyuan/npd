@@ -19,7 +19,7 @@ describe('Resolver', function () {
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
     var logger;
     var dirMode0777;
-    var config = npdconf().load();
+    var config = npdconf();
 
     before(function () {
         var stat;

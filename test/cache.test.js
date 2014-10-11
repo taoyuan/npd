@@ -26,7 +26,7 @@ describe('Cache', function () {
             storage: {
                 packages: cacheDir
             }
-        }).load());
+        }));
 
         // Checkout test package version 0.2.0
         sh.exec('git', ['checkout', '0.2.0'], { cwd: testPackage })
@@ -58,7 +58,7 @@ describe('Cache', function () {
                 storage: {
                     packages: cacheDir
                 }
-            }).load());
+            }));
         }
 
         it('should create the cache folder if it doesn\'t exists', function () {
