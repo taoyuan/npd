@@ -6,7 +6,7 @@ var fs = require('fs-extra');
 
 var h = require('../helpers');
 
-describe.only('command/uninstall', function () {
+describe('command/uninstall', function () {
     var repodir, pkg;
     var install, uninstall;
 
