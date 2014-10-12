@@ -3,7 +3,7 @@
 var path = require('path');
 var t = require('chai').assert;
 var fs = require('fs-extra');
-
+var npdconf = require('../../lib/npdconf');
 var h = require('../helpers');
 
 describe('command/uninstall', function () {
@@ -58,7 +58,50 @@ describe('command/uninstall', function () {
                 t.isFalse(repodir.exists('package'));
             });
         });
+    });
 
+    it('should remove bin links after uninstall', function () {
+        pkg.prepare({
+            'package.json': {
+                name: 'package',
+                bin: {
+                    'npd-bin-test': './npd-bin-test.js'
+                }
+            },
+            'npd-bin-test.js': 'console.log("npd bin test");'
+        });
+
+        repodir.prepare();
+
+        return install([pkg.path]).then(function () {
+            t.isTrue(repodir.exists('.bin/npd-bin-test'));
+            return uninstall(['package']).then(function () {
+                t.isFalse(repodir.exists('.bin/npd-bin-test'));
+            });
+        });
+    });
+
+    it.only('remove global bin links after uninstall', function () {
+        pkg.prepare({
+            'package.json': {
+                name: 'package',
+                bin: {
+                    'npd-bin-test': './npd-bin-test.js'
+                }
+            },
+            'npd-bin-test.js': 'console.log("npd bin test");'
+        });
+
+        repodir.prepare();
+
+        var conf = npdconf({global: true, dir: repodir.path});
+        var binpath = path.resolve(conf.bin, 'npd-bin-test');
+        return install([pkg.path], conf).then(function () {
+            t.isTrue(fs.existsSync(binpath));
+            return uninstall(['package'], conf).then(function () {
+                t.isFalse(fs.existsSync(binpath));
+            });
+        });
     });
 
 });

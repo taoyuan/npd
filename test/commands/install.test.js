@@ -160,7 +160,7 @@ describe('command/install', function () {
         });
     });
 
-    it.only('should link bins to global', function () {
+    it('should link bins to global', function () {
         pkg.prepare({
             'package.json': {
                 name: 'package',
