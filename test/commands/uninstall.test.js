@@ -3,14 +3,14 @@
 var path = require('path');
 var t = require('chai').assert;
 var fs = require('fs-extra');
-var npdconf = require('../../lib/npdconf');
+var npd = require('../../lib/npd');
 var h = require('../helpers');
 
 describe('command/uninstall', function () {
     var repo, pkg;
     var install, uninstall;
 
-    before(function () {
+    beforeEach(function () {
         repo = new h.TempDir();
 
         pkg = new h.TempDir({
@@ -20,13 +20,10 @@ describe('command/uninstall', function () {
             'version.txt': '1.0.0'
         }).prepare();
 
-        install = h.command('install', {
-            cwd: repo.path
-        });
+        npd.load({cwd: repo.path}, true);
 
-        uninstall = h.command('uninstall', {
-            cwd: repo.path
-        });
+        install = h.command('install');
+        uninstall = h.command('uninstall');
     });
 
     beforeEach(function() {
@@ -94,11 +91,11 @@ describe('command/uninstall', function () {
 
         repo.prepare();
 
-        var conf = npdconf({global: true, dir: repo.path});
-        var binpath = path.resolve(conf.bin, 'npd-bin-test');
-        return install([pkg.path], conf).then(function () {
+        npd.load({global: true, dir: repo.path}, true);
+        var binpath = path.resolve(npd.config.bin, 'npd-bin-test');
+        return install([pkg.path]).then(function () {
             t.isTrue(fs.existsSync(binpath));
-            return uninstall(['package'], conf).then(function () {
+            return uninstall(['package']).then(function () {
                 t.isFalse(fs.existsSync(binpath));
             });
         });

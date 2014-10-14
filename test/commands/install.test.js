@@ -6,16 +6,17 @@ var ini = require('ini');
 var object = require('mout').object;
 var path = require('path');
 var fs = require('fs-extra');
+var npd = require('../../lib/npd');
 var h = require('../helpers');
 var npdconf = require('../../lib/npdconf');
 
 describe('command/install', function () {
 
-    var repodir, pkg, gitpkg;
+    var repo, pkg, gitpkg, opts;
     var install, installLogger;
 
-    before(function () {
-        repodir = new h.TempDir();
+    beforeEach(function () {
+        repo = new h.TempDir();
 
         pkg = new h.TempDir({
             'package.json': {
@@ -25,24 +26,22 @@ describe('command/install', function () {
 
         gitpkg = new h.TempDir();
 
-        install = h.command('install', {
-            cwd: repodir.path
-        });
+        opts = {cwd: repo.path};
 
-        installLogger = h.commandForLogger('install', {
-            cwd: repodir.path
-        });
+        install = h.command('install');
+        installLogger = h.commandForLogger('install');
     });
 
     it('reads .npdrc from cwd', function () {
         pkg.prepare({ foo: 'bar' });
 
-        repodir.prepare({
-            '.npdrc': ini.encode({dir: repodir.path})
+        repo.prepare({
+            '.npdrc': ini.encode({dir: repo.path})
         });
 
+        npd.load(opts, true);
         return install([pkg.path]).then(function () {
-            t.equal(repodir.read('package/foo'), 'bar');
+            t.equal(repo.read('package/foo'), 'bar');
         });
     });
 
@@ -50,7 +49,7 @@ describe('command/install', function () {
     it('runs preinstall hook', function () {
         pkg.prepare();
 
-        repodir.prepare({
+        repo.prepare({
             '.npdrc': ini.encode({
                 scripts: {
                     preinstall: 'bash -c "echo -n % > preinstall.txt"'
@@ -58,15 +57,16 @@ describe('command/install', function () {
             })
         });
 
+        npd.load(opts, true);
         return install([pkg.path]).then(function () {
-            t.equal(repodir.read('preinstall.txt'), 'package');
+            t.equal(repo.read('preinstall.txt'), 'package');
         });
     });
 
     it('runs postinstall hook', function () {
         pkg.prepare();
 
-        repodir.prepare({
+        repo.prepare({
             '.npdrc': ini.encode({
                 scripts: {
                     postinstall: 'bash -c "echo -n % > postinstall.txt"'
@@ -74,15 +74,16 @@ describe('command/install', function () {
             })
         });
 
+        npd.load(opts, true);
         return install([pkg.path]).then(function () {
-            t.equal(repodir.read('postinstall.txt'), 'package');
+            t.equal(repo.read('postinstall.txt'), 'package');
         });
     });
 
 
     // To be discussed, but that's the implementation now
     it('does not run hooks if nothing is installed', function () {
-        repodir.prepare({
+        repo.prepare({
             '.npdrc': ini.encode({
                 scripts: {
                     postinstall: 'bash -c "echo -n % > hooks.txt"',
@@ -91,15 +92,16 @@ describe('command/install', function () {
             })
         });
 
+        npd.load(opts, true);
         return install().then(function () {
-            t.isFalse(repodir.exists('hooks.txt'));
+            t.isFalse(repo.exists('hooks.txt'));
         });
     });
 
     it('display the output of hook scripts', function (next) {
         pkg.prepare();
 
-        repodir.prepare({
+        repo.prepare({
             '.npdrc': ini.encode({
                 scripts: {
                     postinstall: 'bash -c "echo foobar"'
@@ -109,6 +111,7 @@ describe('command/install', function () {
 
         var lastAction = null;
 
+        npd.load(opts, true);
         installLogger([pkg.path]).intercept(function (log) {
             if (log.level === 'action') {
                 lastAction = log;
@@ -135,10 +138,11 @@ describe('command/install', function () {
             }
         });
 
-        repodir.prepare();
+        repo.prepare();
 
+        npd.load(opts, true);
         return install([gitpkg.path + '#1.0.0']).then(function () {
-            t.equal(repodir.read('package/version.txt'), '1.0.0');
+            t.equal(repo.read('package/version.txt'), '1.0.0');
         });
     });
 
@@ -153,10 +157,11 @@ describe('command/install', function () {
             'npd-bin-test.js': 'console.log("npd bin test");'
         });
 
-        repodir.prepare();
+        repo.prepare();
 
+        npd.load(opts, true);
         return install([pkg.path]).then(function () {
-            t.isTrue(repodir.exists('.bin/npd-bin-test'));
+            t.isTrue(repo.exists('.bin/npd-bin-test'));
         });
     });
 
@@ -171,12 +176,12 @@ describe('command/install', function () {
             'npd-bin-test.js': 'console.log("npd bin test");'
         });
 
-        repodir.prepare();
+        repo.prepare();
 
-        var conf = npdconf({global: true, dir: repodir.path});
-        return install([pkg.path], conf).then(function () {
-            t.isTrue(fs.existsSync(path.resolve(conf.bin, 'npd-bin-test')));
-            fs.removeSync(path.resolve(conf.bin, 'npd-bin-test'));
+        npd.load({global: true, dir: repo.path});
+        return install([pkg.path]).then(function () {
+            t.isTrue(fs.existsSync(path.resolve(npd.config.bin, 'npd-bin-test')));
+            fs.removeSync(path.resolve(npd.config.bin, 'npd-bin-test'));
         });
     });
 });

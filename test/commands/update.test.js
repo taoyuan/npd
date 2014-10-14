@@ -2,24 +2,26 @@ require('chai').config.includeStack = true;
 var t = require('chai').assert;
 var object = require('mout').object;
 var ini = require('ini');
+var npd = require('../../lib/npd');
 var h = require('../helpers');
 
 describe('command/update', function () {
 
-    var repo, pkg, gitpkg;
+    var repo, pkg, gitpkg, opts;
     var install, update, updateLogger;
 
-    before(function () {
+    beforeEach(function () {
         repo = new h.TempDir();
 
         pkg = new h.TempDir();
 
         gitpkg = new h.TempDir();
 
-        var opts = { cwd: repo.path };
-        install = h.command('install', opts);
-        update = h.command('update', opts);
-        updateLogger = h.commandForLogger('update', opts);
+        opts = {cwd: repo.path};
+        npd.load(opts, true);
+        install = h.command('install');
+        update = h.command('update');
+        updateLogger = h.commandForLogger('update');
     });
 
     var gitInitialCommit = function () {
@@ -66,6 +68,7 @@ describe('command/update', function () {
             })
         });
 
+        npd.load(opts, true);
         return install([pkg.path]).then(function() {
             repo.prepare();
 
@@ -91,7 +94,7 @@ describe('command/update', function () {
         });
     });
 
-    it.only('should keep the original one if no update', function () {
+    it('should keep the original one if no update', function () {
         repo.prepare();
         gitInitialCommit();
         return install([gitpkg.path]).then(function() {
@@ -111,6 +114,7 @@ describe('command/update', function () {
             })
         });
 
+        npd.load(opts, true);
         gitInitialCommit();
         return install([gitpkg.path]).then(function() {
             t.isTrue(repo.exists('preinstall.txt'));
@@ -132,6 +136,7 @@ describe('command/update', function () {
             })
         });
 
+        npd.load(opts, true);
         gitInitialCommit();
         return install([gitpkg.path]).then(function() {
             t.isTrue(repo.exists('postinstall.txt'));

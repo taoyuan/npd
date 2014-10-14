@@ -28,6 +28,7 @@
     "install"
   ],
   "dependencies": {
+    "archy": "^1.0.0",
     "async": "^0.9.0",
     "bower-logger": "^0.2.2",
     "chalk": "^0.5.1",
@@ -52,6 +53,7 @@
     "osenv": "^0.1.0",
     "p-throttler": "^0.1.1",
     "pad": "0.0.5",
+    "promptly": "^0.2.0",
     "rc": "^0.5.1",
     "request": "^2.44.0",
     "request-progress": "^0.3.1",
@@ -61,6 +63,7 @@
     "shell-quote": "^1.4.2",
     "shelljs": "taoyuan/shelljs",
     "slide": "^1.1.6",
+    "stringify-object": "^1.0.0",
     "tar-fs": "^1.0.0",
     "tmp": "0.0.24",
     "when": "^3.4.6",
