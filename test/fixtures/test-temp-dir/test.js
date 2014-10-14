@@ -1,7 +1,7 @@
 var fs = require('fs-extra');
 var path = require('path');
+var Logger = require('bower-logger');
 var npdconf = require('../../../lib/npdconf');
-var Logger = require('../../../lib/logger');
 var Resolver = require('../../../lib/resolvers/Resolver');
 
 var resolver = new Resolver({ source: 'foo' }, npdconf(), new Logger());

@@ -29,6 +29,7 @@
   ],
   "dependencies": {
     "async": "^0.9.0",
+    "bower-logger": "^0.2.2",
     "chalk": "^0.5.1",
     "chmodr": "^0.1.0",
     "decompress-zip": "0.0.8",

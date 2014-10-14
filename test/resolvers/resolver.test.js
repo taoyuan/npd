@@ -6,11 +6,11 @@ var util = require('util');
 var when = require('when');
 var tmp = require('tmp');
 var t = require('chai').assert;
+var Logger = require('bower-logger');
 var h = require('../helpers');
 var sh = h.require('lib/utils/sh');
 var copy = h.require(('lib/utils/copy'));
 var npdconf = h.require('lib/npdconf');
-var Logger = h.require('lib/logger');
 var Resolver = h.require('lib/resolvers/resolver');
 
 

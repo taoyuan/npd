@@ -13,6 +13,9 @@ var npd = require('../lib/npd');
 var npdconf = require('../lib/npdconf');
 var Repository = require('../lib/repository');
 
+require('chai').config.includeStack = true;
+exports.t = require('chai').assert;
+
 // Those are needed for Travis or not configured git environment
 var env = {
     'GIT_AUTHOR_DATE': 'Sun Apr 7 22:13:13 2013 +0000',
@@ -51,11 +54,9 @@ exports.expectEvent = function (emitter, eventName) {
 };
 
 exports.command = function (cmd, options) {
+    var fn = exports.commandForLogger(cmd, options);
     return function (packages, config) {
-        if (!(config instanceof npdconf.Configure)) {
-            config = object.merge(options || {}, config);
-        }
-        var logger = npd.commands[cmd](packages, config);
+        var logger = fn(packages, config);
         return exports.expectEvent(logger, 'end');
     }
 };
@@ -65,7 +66,11 @@ exports.commandForLogger = function (cmd, options) {
         if (!(config instanceof npdconf.Configure)) {
             config = object.merge(options || {}, config);
         }
-        return npd.commands[cmd](packages, config);
+        var logger = npd.commands[cmd](packages, config);
+        logger.once('end', function () {
+            Repository.clearRuntimeCache();
+        });
+        return logger;
     }
 };
 

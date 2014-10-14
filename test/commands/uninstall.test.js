@@ -7,11 +7,11 @@ var npdconf = require('../../lib/npdconf');
 var h = require('../helpers');
 
 describe('command/uninstall', function () {
-    var repodir, pkg;
+    var repo, pkg;
     var install, uninstall;
 
     before(function () {
-        repodir = new h.TempDir();
+        repo = new h.TempDir();
 
         pkg = new h.TempDir({
             'package.json': {
@@ -21,41 +21,41 @@ describe('command/uninstall', function () {
         }).prepare();
 
         install = h.command('install', {
-            cwd: repodir.path
+            cwd: repo.path
         });
 
         uninstall = h.command('uninstall', {
-            cwd: repodir.path
+            cwd: repo.path
         });
     });
 
     beforeEach(function() {
-        repodir.prepare();
+        repo.prepare();
     });
 
     it('should not remove anything from repo if not exists', function () {
         return install([pkg.path]).then(function () {
-            t.include(repodir.read('package/version.txt'), '1.0.0');
+            t.include(repo.read('package/version.txt'), '1.0.0');
             return uninstall(['unknown']).then(function () {
-                t.isTrue(repodir.exists('package'));
+                t.isTrue(repo.exists('package'));
             });
         });
     });
 
     it('should not remove anything from repo if no packages provided', function () {
         return install([pkg.path]).then(function () {
-            t.include(repodir.read('package/version.txt'), '1.0.0');
+            t.include(repo.read('package/version.txt'), '1.0.0');
             return uninstall().then(function () {
-                t.isTrue(repodir.exists('package'));
+                t.isTrue(repo.exists('package'));
             });
         });
     });
 
     it('should remove installed package from repo', function () {
         return install([pkg.path]).then(function () {
-            t.include(repodir.read('package/version.txt'), '1.0.0');
+            t.include(repo.read('package/version.txt'), '1.0.0');
             return uninstall(['package']).then(function () {
-                t.isFalse(repodir.exists('package'));
+                t.isFalse(repo.exists('package'));
             });
         });
     });
@@ -71,17 +71,17 @@ describe('command/uninstall', function () {
             'npd-bin-test.js': 'console.log("npd bin test");'
         });
 
-        repodir.prepare();
+        repo.prepare();
 
         return install([pkg.path]).then(function () {
-            t.isTrue(repodir.exists('.bin/npd-bin-test'));
+            t.isTrue(repo.exists('.bin/npd-bin-test'));
             return uninstall(['package']).then(function () {
-                t.isFalse(repodir.exists('.bin/npd-bin-test'));
+                t.isFalse(repo.exists('.bin/npd-bin-test'));
             });
         });
     });
 
-    it.only('remove global bin links after uninstall', function () {
+    it('remove global bin links after uninstall', function () {
         pkg.prepare({
             'package.json': {
                 name: 'package',
@@ -92,9 +92,9 @@ describe('command/uninstall', function () {
             'npd-bin-test.js': 'console.log("npd bin test");'
         });
 
-        repodir.prepare();
+        repo.prepare();
 
-        var conf = npdconf({global: true, dir: repodir.path});
+        var conf = npdconf({global: true, dir: repo.path});
         var binpath = path.resolve(conf.bin, 'npd-bin-test');
         return install([pkg.path], conf).then(function () {
             t.isTrue(fs.existsSync(binpath));
