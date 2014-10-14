@@ -6,17 +6,17 @@ var h = require('../helpers');
 
 describe('command/update', function () {
 
-    var repodir, pkg, gitpkg;
+    var repo, pkg, gitpkg;
     var install, update, updateLogger;
 
     before(function () {
-        repodir = new h.TempDir();
+        repo = new h.TempDir();
 
         pkg = new h.TempDir();
 
         gitpkg = new h.TempDir();
 
-        var opts = { cwd: repodir.path };
+        var opts = { cwd: repo.path };
         install = h.command('install', opts);
         update = h.command('update', opts);
         updateLogger = h.commandForLogger('update', opts);
@@ -26,8 +26,12 @@ describe('command/update', function () {
         gitpkg.gitPrepare({
             '1.0.0': {
                 'package.json': {
-                    name: 'package'
+                    name: 'package',
+                    bin: {
+                        "npd-a": './say-hello.js'
+                    }
                 },
+                'say-hello.js': 'console.log("hello");',
                 'version.txt': '1.0.0'
             }
         });
@@ -36,8 +40,12 @@ describe('command/update', function () {
         gitpkg.gitCommit({
             '1.0.1': {
                 'package.json': {
-                    name: 'package'
+                    name: 'package',
+                    bin: {
+                        "npd-b": './say-hello.js'
+                    }
                 },
+                'say-hello.js': 'console.log("hello");',
                 'version.txt': '1.0.1'
             }
         });
@@ -50,7 +58,7 @@ describe('command/update', function () {
             }
         });
 
-        repodir.prepare({
+        repo.prepare({
             '.npdrc': ini.encode({
                 scripts: {
                     postinstall: 'bash -c "echo -n % > postinstall.txt"'
@@ -59,28 +67,43 @@ describe('command/update', function () {
         });
 
         return install([pkg.path]).then(function() {
-            repodir.prepare();
+            repo.prepare();
 
             return update().then(function() {
-                t.isFalse(repodir.exists('postinstall.txt'));
+                t.isFalse(repo.exists('postinstall.txt'));
             });
         });
     });
 
-    it('updates a package', function () {
-        repodir.prepare();
+    it('should update a package to latest version', function () {
+        repo.prepare();
         gitInitialCommit();
         return install([gitpkg.path]).then(function() {
-            t.include(repodir.read('package/version.txt'), '1.0.0');
+            t.include(repo.read('package/version.txt'), '1.0.0');
+            t.isTrue(repo.exists('.bin/npd-a'));
+            t.isFalse(repo.exists('.bin/npd-b'));
             gitUpdateCommit();
             return update().then(function() {
-                t.include(repodir.read('package/version.txt'), '1.0.1');
+                t.include(repo.read('package/version.txt'), '1.0.1');
+                t.isFalse(repo.exists('.bin/npd-a'));
+                t.isTrue(repo.exists('.bin/npd-b'));
+            });
+        });
+    });
+
+    it.only('should keep the original one if no update', function () {
+        repo.prepare();
+        gitInitialCommit();
+        return install([gitpkg.path]).then(function() {
+            t.include(repo.read('package/version.txt'), '1.0.0');
+            return update().then(function() {
+                t.include(repo.read('package/version.txt'), '1.0.0');
             });
         });
     });
 
     it('runs preinstall hook when updating a package', function () {
-        repodir.prepare({
+        repo.prepare({
             '.npdrc': ini.encode({
                 scripts: {
                     preinstall: 'bash -c "echo -n % > preinstall.txt"'
@@ -90,18 +113,18 @@ describe('command/update', function () {
 
         gitInitialCommit();
         return install([gitpkg.path]).then(function() {
-            t.isTrue(repodir.exists('preinstall.txt'));
-            repodir.remove('preinstall.txt');
-            t.isFalse(repodir.exists('preinstall.txt'));
+            t.isTrue(repo.exists('preinstall.txt'));
+            repo.remove('preinstall.txt');
+            t.isFalse(repo.exists('preinstall.txt'));
             gitUpdateCommit();
             return update().then(function() {
-                t.equal(repodir.read('preinstall.txt'), 'package');
+                t.equal(repo.read('preinstall.txt'), 'package');
             });
         });
     });
 
     it('runs postinstall hook when updating a package', function () {
-        repodir.prepare({
+        repo.prepare({
             '.npdrc': ini.encode({
                 scripts: {
                     postinstall: 'bash -c "echo -n % > postinstall.txt"'
@@ -111,12 +134,12 @@ describe('command/update', function () {
 
         gitInitialCommit();
         return install([gitpkg.path]).then(function() {
-            t.isTrue(repodir.exists('postinstall.txt'));
-            repodir.remove('postinstall.txt');
-            t.isFalse(repodir.exists('postinstall.txt'));
+            t.isTrue(repo.exists('postinstall.txt'));
+            repo.remove('postinstall.txt');
+            t.isFalse(repo.exists('postinstall.txt'));
             gitUpdateCommit();
             return update().then(function() {
-                t.equal(repodir.read('postinstall.txt'), 'package');
+                t.equal(repo.read('postinstall.txt'), 'package');
             });
         });
     });
