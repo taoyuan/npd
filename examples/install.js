@@ -1,8 +1,8 @@
 "use strict";
 
-process.env.npd_root = '/tmp';
-process.env.npd_repo = '/tmp';
-
-cli(['install', 'taoyuan/npd-example'], function () {
-    console.log('done');
+require("../lib/cli")(['install', 'taoyuan/npd-test'], function (err) {
+    if (err) {
+        console.err(err);
+        process.exit(1);
+    }
 });

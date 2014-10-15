@@ -15,7 +15,7 @@ function assertCommand(cmd, pkg, expcmd, expopts) {
     ndm[cmd](pkg);
 }
 
-describe.only('ndm', function () {
+describe('ndm', function () {
 
     var pkg, repo;
 

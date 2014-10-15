@@ -20,7 +20,7 @@ describe('command/uninstall', function () {
             'version.txt': '1.0.0'
         }).prepare();
 
-        npd.load({cwd: repo.path}, true);
+        npd.load({dir: repo.path}, true);
 
         install = h.command('install');
         uninstall = h.command('uninstall');
