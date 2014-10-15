@@ -57,27 +57,6 @@ describe('command/uninstall', function () {
         });
     });
 
-    it('should remove bin links after uninstall', function () {
-        pkg.prepare({
-            'package.json': {
-                name: 'package',
-                bin: {
-                    'npd-bin-test': './npd-bin-test.js'
-                }
-            },
-            'npd-bin-test.js': 'console.log("npd bin test");'
-        });
-
-        repo.prepare();
-
-        return install([pkg.path]).then(function () {
-            t.isTrue(repo.exists('.bin/npd-bin-test'));
-            return uninstall(['package']).then(function () {
-                t.isFalse(repo.exists('.bin/npd-bin-test'));
-            });
-        });
-    });
-
     it('remove global bin links after uninstall', function () {
         pkg.prepare({
             'package.json': {
@@ -91,7 +70,7 @@ describe('command/uninstall', function () {
 
         repo.prepare();
 
-        npd.load({global: true, dir: repo.path}, true);
+        npd.load({dir: repo.path}, true);
         var binpath = path.resolve(npd.config.bin, 'npd-bin-test');
         return install([pkg.path]).then(function () {
             t.isTrue(fs.existsSync(binpath));

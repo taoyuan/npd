@@ -1,4 +1,5 @@
-require('chai').config.includeStack = true;
+
+var _ = require('lodash');
 var t = require('chai').assert;
 var object = require('mout').object;
 var ini = require('ini');
@@ -80,16 +81,17 @@ describe('command/update', function () {
 
     it('should update a package to latest version', function () {
         repo.prepare();
+        npd.load(_.assign({ prefix: repo.path }, opts), true);
         gitInitialCommit();
         return install([gitpkg.path]).then(function() {
             t.include(repo.read('package/version.txt'), '1.0.0');
-            t.isTrue(repo.exists('.bin/npd-a'));
-            t.isFalse(repo.exists('.bin/npd-b'));
+            t.isTrue(repo.exists('bin/npd-a'));
+            t.isFalse(repo.exists('bin/npd-b'));
             gitUpdateCommit();
             return update().then(function() {
                 t.include(repo.read('package/version.txt'), '1.0.1');
-                t.isFalse(repo.exists('.bin/npd-a'));
-                t.isTrue(repo.exists('.bin/npd-b'));
+                t.isFalse(repo.exists('bin/npd-a'));
+                t.isTrue(repo.exists('bin/npd-b'));
             });
         });
     });

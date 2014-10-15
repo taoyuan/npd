@@ -11,7 +11,7 @@ describe('GitFsResolver', function () {
     var tempSource;
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
     var logger;
-    var config = npdconf();
+    var config = npdconf({dir: process.cwd()});
 
     before(function () {
         logger = new Logger();

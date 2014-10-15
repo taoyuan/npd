@@ -1,5 +1,6 @@
 "use strict";
 
+var _ = require('lodash');
 var chai = require('chai');
 var t = require('chai').assert;
 var ini = require('ini');
@@ -159,9 +160,9 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        npd.load(opts, true);
+        npd.load(_.assign({ prefix: repo.path }, opts), true);
         return install([pkg.path]).then(function () {
-            t.isTrue(repo.exists('.bin/npd-bin-test'));
+            t.isTrue(repo.exists('bin/npd-bin-test'));
         });
     });
 
@@ -178,10 +179,30 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        npd.load({global: true, dir: repo.path});
+        npd.load({dir: repo.path});
         return install([pkg.path]).then(function () {
             t.isTrue(fs.existsSync(path.resolve(npd.config.bin, 'npd-bin-test')));
             fs.removeSync(path.resolve(npd.config.bin, 'npd-bin-test'));
+        });
+    });
+
+    it('should install to custom prefix', function () {
+        pkg.prepare({
+            'package.json': {
+                name: 'package',
+                bin: {
+                    'npd-bin-test': './npd-bin-test.js'
+                }
+            },
+            'npd-bin-test.js': 'console.log("npd bin test");'
+        });
+
+        repo.prepare();
+
+        npd.load({prefix: repo.path}, true);
+        return install([pkg.path]).then(function () {
+            t.isTrue(repo.exists('bin/npd-bin-test'));
+            t.isTrue(repo.exists(npd.config.apps + '/package'));
         });
     });
 });
