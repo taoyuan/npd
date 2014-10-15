@@ -36,7 +36,7 @@ describe('ndm', function () {
 
     it('should generate appropriate install/remove/start/stop/restart commands', function() {
         var dir = path.resolve(repo.path, 'ndm-test');
-        var opts = {cwd: dir};
+        var opts = {cwd: dir, silent: true};
         fs.copySync(pkg.path, dir);
 
         assertCommand('install', 'ndm-test', ndm.bin + ' generate', opts);
