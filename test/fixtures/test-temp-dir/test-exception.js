@@ -2,7 +2,7 @@ var fs = require('fs-extra');
 var path = require('path');
 var Logger = require('bower-logger');
 var npdconf = require('../../../lib/npdconf');
-var Resolver = require('../../../lib/resolvers/Resolver');
+var Resolver = require('../../../lib/resolvers/resolver');
 
 var resolver = new Resolver({ source: 'foo' }, npdconf(), new Logger());
 resolver._createTempDir()
