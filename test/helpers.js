@@ -58,7 +58,7 @@ exports.command = function (cmd, options) {
     return function (packages, config) {
         var logger = fn(packages, config);
         return exports.expectEvent(logger, 'end');
-    }
+    };
 };
 
 exports.commandForLogger = function (cmd, options) {
@@ -71,7 +71,7 @@ exports.commandForLogger = function (cmd, options) {
             Repository.clearRuntimeCache();
         });
         return logger;
-    }
+    };
 };
 
 exports.TempDir = function (defaults) {
