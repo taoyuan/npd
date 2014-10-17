@@ -61,7 +61,7 @@
     "semver": "^4.0.0",
     "semver-regex": "^1.0.0",
     "shell-quote": "^1.4.2",
-    "shelljs": "taoyuan/shelljs",
+    "shelljs": "^0.3.0",
     "slide": "^1.1.6",
     "stringify-object": "^1.0.0",
     "tar-fs": "^1.0.0",
