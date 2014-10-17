@@ -48,67 +48,47 @@ describe('command/install', function () {
 
 
     it('runs preinstall hook', function () {
-        pkg.prepare();
-
-        repo.prepare({
-            '.npdrc': ini.encode({
+        pkg.prepare({
+            'npd.json': {
                 scripts: {
-                    preinstall: 'bash -c "echo -n % > preinstall.txt"'
+                    preinstall: 'bash -c "echo -n package > preinstall.txt"'
                 }
-            })
+            }
         });
+
+        repo.prepare();
 
         npd.load(opts, true);
         return install([pkg.path]).then(function () {
-            t.equal(repo.read('preinstall.txt'), 'package');
+            t.equal(repo.read('package/preinstall.txt'), 'package');
         });
     });
 
     it('runs postinstall hook', function () {
-        pkg.prepare();
-
-        repo.prepare({
-            '.npdrc': ini.encode({
+        pkg.prepare({
+            'npd.json': {
                 scripts: {
-                    postinstall: 'bash -c "echo -n % > postinstall.txt"'
+                    postinstall: 'bash -c "echo -n package > postinstall.txt"'
                 }
-            })
+            }
         });
 
         npd.load(opts, true);
         return install([pkg.path]).then(function () {
-            t.equal(repo.read('postinstall.txt'), 'package');
-        });
-    });
-
-
-    // To be discussed, but that's the implementation now
-    it('does not run hooks if nothing is installed', function () {
-        repo.prepare({
-            '.npdrc': ini.encode({
-                scripts: {
-                    postinstall: 'bash -c "echo -n % > hooks.txt"',
-                    preinstall: 'bash -c "echo -n % > hooks.txt"'
-                }
-            })
-        });
-
-        npd.load(opts, true);
-        return install().then(function () {
-            t.isFalse(repo.exists('hooks.txt'));
+            t.equal(repo.read('package/postinstall.txt'), 'package');
         });
     });
 
     it('display the output of hook scripts', function (next) {
-        pkg.prepare();
-
-        repo.prepare({
-            '.npdrc': ini.encode({
+        pkg.prepare({
+            'npd.json': {
                 scripts: {
                     postinstall: 'bash -c "echo foobar"'
                 }
-            })
+            }
         });
+
+        repo.prepare();
 
         var lastAction = null;
 

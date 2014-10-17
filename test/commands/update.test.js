@@ -25,59 +25,99 @@ describe('command/update', function () {
         updateLogger = h.commandForLogger('update');
     });
 
+    var files = {
+        'package.json': {
+            name: 'package',
+            bin: {
+                "npd-a": './say-hello.js'
+            }
+        },
+        'npd.json': {
+            scripts: {
+                preinstall: 'bash -c "echo -n package > preinstall.txt"',
+                postinstall: 'bash -c "echo -n package > postinstall.txt"'
+            }
+        },
+        'say-hello.js': 'console.log("hello");',
+        'version.txt': '1.0.0'
+    };
+
     var gitInitialCommit = function () {
         gitpkg.gitPrepare({
-            '1.0.0': {
-                'package.json': {
-                    name: 'package',
-                    bin: {
-                        "npd-a": './say-hello.js'
-                    }
-                },
-                'say-hello.js': 'console.log("hello");',
-                'version.txt': '1.0.0'
-            }
+            '1.0.0': files
         });
     };
     var gitUpdateCommit = function () {
         gitpkg.gitCommit({
-            '1.0.1': {
+            '1.0.1': _.assign({}, files, {
                 'package.json': {
                     name: 'package',
                     bin: {
                         "npd-b": './say-hello.js'
                     }
                 },
-                'say-hello.js': 'console.log("hello");',
                 'version.txt': '1.0.1'
-            }
+            })
         });
     };
 
-    it('should not runs postinstall when no package is update', function () {
+    it('should not run postinstall when no package is update', function () {
         pkg.prepare({
             'package.json': {
                 name: 'package'
+            },
+            'npd.json': {
+                scripts: {
+                    postinstall: 'bash -c "echo -n package > postinstall.txt"'
+                }
             }
         });
 
-        repo.prepare({
-            '.npdrc': ini.encode({
-                scripts: {
-                    postinstall: 'bash -c "echo -n % > postinstall.txt"'
-                }
-            })
-        });
+        repo.prepare();
 
         npd.load(opts, true);
         return install([pkg.path]).then(function() {
             repo.prepare();
 
             return update().then(function() {
-                t.isFalse(repo.exists('postinstall.txt'));
+                t.isFalse(repo.exists('package/postinstall.txt'));
             });
         });
     });
+
+
+    it('should run preinstall hook when updating a package', function () {
+        repo.prepare();
+
+        npd.load(opts, true);
+        gitInitialCommit();
+        return install([gitpkg.path]).then(function() {
+            t.isTrue(repo.exists('package/preinstall.txt'));
+            repo.remove('package/preinstall.txt');
+            t.isFalse(repo.exists('package/preinstall.txt'));
+            gitUpdateCommit();
+            return update().then(function() {
+                t.equal(repo.read('package/preinstall.txt'), 'package');
+            });
+        });
+    });
+
+    it('should run postinstall hook when updating a package', function () {
+        repo.prepare();
+
+        npd.load(opts, true);
+        gitInitialCommit();
+        return install([gitpkg.path]).then(function() {
+            t.isTrue(repo.exists('package/postinstall.txt'));
+            repo.remove('package/postinstall.txt');
+            t.isFalse(repo.exists('package/postinstall.txt'));
+            gitUpdateCommit();
+            return update().then(function() {
+                t.equal(repo.read('package/postinstall.txt'), 'package');
+            });
+        });
+    });
+
 
     it('should update a package to latest version', function () {
         repo.prepare();
@@ -103,50 +143,6 @@ describe('command/update', function () {
             t.include(repo.read('package/version.txt'), '1.0.0');
             return update().then(function() {
                 t.include(repo.read('package/version.txt'), '1.0.0');
-            });
-        });
-    });
-
-    it('runs preinstall hook when updating a package', function () {
-        repo.prepare({
-            '.npdrc': ini.encode({
-                scripts: {
-                    preinstall: 'bash -c "echo -n % > preinstall.txt"'
-                }
-            })
-        });
-
-        npd.load(opts, true);
-        gitInitialCommit();
-        return install([gitpkg.path]).then(function() {
-            t.isTrue(repo.exists('preinstall.txt'));
-            repo.remove('preinstall.txt');
-            t.isFalse(repo.exists('preinstall.txt'));
-            gitUpdateCommit();
-            return update().then(function() {
-                t.equal(repo.read('preinstall.txt'), 'package');
-            });
-        });
-    });
-
-    it('runs postinstall hook when updating a package', function () {
-        repo.prepare({
-            '.npdrc': ini.encode({
-                scripts: {
-                    postinstall: 'bash -c "echo -n % > postinstall.txt"'
-                }
-            })
-        });
-
-        npd.load(opts, true);
-        gitInitialCommit();
-        return install([gitpkg.path]).then(function() {
-            t.isTrue(repo.exists('postinstall.txt'));
-            repo.remove('postinstall.txt');
-            t.isFalse(repo.exists('postinstall.txt'));
-            gitUpdateCommit();
-            return update().then(function() {
-                t.equal(repo.read('postinstall.txt'), 'package');
             });
         });
     });
