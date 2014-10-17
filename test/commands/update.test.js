@@ -1,4 +1,3 @@
-
 var _ = require('lodash');
 var t = require('chai').assert;
 var object = require('mout').object;
@@ -35,7 +34,8 @@ describe('command/update', function () {
         'npd.json': {
             scripts: {
                 preinstall: 'bash -c "echo -n package > preinstall.txt"',
-                postinstall: 'bash -c "echo -n package > postinstall.txt"'
+                postinstall: 'bash -c "echo -n package > postinstall.txt"',
+                preuninstall: 'bash -c "echo -n package > ../preuninstall.txt"'
             }
         },
         'say-hello.js': 'console.log("hello");',
@@ -44,20 +44,44 @@ describe('command/update', function () {
 
     var gitInitialCommit = function () {
         gitpkg.gitPrepare({
-            '1.0.0': files
-        });
+            '1.0.0': {
+                'package.json': {
+                    name: 'package',
+                    bin: {
+                        "npd-a": './say-hello.js'
+                    }
+                },
+                'npd.json': {
+                    scripts: {
+                        preinstall: 'bash -c "echo -n 1.0.0 > preinstall.txt"',
+                        postinstall: 'bash -c "echo -n 1.0.0 > postinstall.txt"',
+                        preuninstall: 'bash -c "echo -n 1.0.0 > ../preuninstall.txt"'
+                    }
+                },
+                'say-hello.js': 'console.log("hello");',
+                'version.txt': '1.0.0'
+            }
+        })
     };
+
     var gitUpdateCommit = function () {
         gitpkg.gitCommit({
-            '1.0.1': _.assign({}, files, {
+            '1.0.1': {
                 'package.json': {
                     name: 'package',
                     bin: {
                         "npd-b": './say-hello.js'
                     }
                 },
+                'npd.json': {
+                    scripts: {
+                        preinstall: 'bash -c "echo -n 1.0.1 > preinstall.txt"',
+                        postinstall: 'bash -c "echo -n 1.0.1 > postinstall.txt"'
+                    }
+                },
+                'say-hello.js': 'console.log("hello");',
                 'version.txt': '1.0.1'
-            })
+            }
         });
     };
 
@@ -76,10 +100,10 @@ describe('command/update', function () {
         repo.prepare();
 
         npd.load(opts, true);
-        return install([pkg.path]).then(function() {
+        return install([pkg.path]).then(function () {
             repo.prepare();
 
-            return update().then(function() {
+            return update().then(function () {
                 t.isFalse(repo.exists('package/postinstall.txt'));
             });
         });
@@ -91,13 +115,13 @@ describe('command/update', function () {
 
         npd.load(opts, true);
         gitInitialCommit();
-        return install([gitpkg.path]).then(function() {
-            t.isTrue(repo.exists('package/preinstall.txt'));
+        return install([gitpkg.path]).then(function () {
+            t.equal(repo.read('package/preinstall.txt'), '1.0.0');
             repo.remove('package/preinstall.txt');
             t.isFalse(repo.exists('package/preinstall.txt'));
             gitUpdateCommit();
-            return update().then(function() {
-                t.equal(repo.read('package/preinstall.txt'), 'package');
+            return update().then(function () {
+                t.equal(repo.read('package/preinstall.txt'), '1.0.1');
             });
         });
     });
@@ -107,13 +131,26 @@ describe('command/update', function () {
 
         npd.load(opts, true);
         gitInitialCommit();
-        return install([gitpkg.path]).then(function() {
-            t.isTrue(repo.exists('package/postinstall.txt'));
+        return install([gitpkg.path]).then(function () {
+            t.equal(repo.read('package/postinstall.txt'), '1.0.0');
             repo.remove('package/postinstall.txt');
             t.isFalse(repo.exists('package/postinstall.txt'));
             gitUpdateCommit();
-            return update().then(function() {
-                t.equal(repo.read('package/postinstall.txt'), 'package');
+            return update().then(function () {
+                t.equal(repo.read('package/postinstall.txt'), '1.0.1');
+            });
+        });
+    });
+
+    it('should run preuninstall hook when updating a package', function () {
+        repo.prepare();
+
+        npd.load(opts, true);
+        gitInitialCommit();
+        return install([gitpkg.path]).then(function () {
+            gitUpdateCommit();
+            return update().then(function () {
+                t.equal(repo.read('preuninstall.txt'), '1.0.0');
             });
         });
     });
@@ -123,12 +160,12 @@ describe('command/update', function () {
         repo.prepare();
         npd.load(_.assign({ prefix: repo.path }, opts), true);
         gitInitialCommit();
-        return install([gitpkg.path]).then(function() {
+        return install([gitpkg.path]).then(function () {
             t.include(repo.read('package/version.txt'), '1.0.0');
             t.isTrue(repo.exists('bin/npd-a'));
             t.isFalse(repo.exists('bin/npd-b'));
             gitUpdateCommit();
-            return update().then(function() {
+            return update().then(function () {
                 t.include(repo.read('package/version.txt'), '1.0.1');
                 t.isFalse(repo.exists('bin/npd-a'));
                 t.isTrue(repo.exists('bin/npd-b'));
@@ -139,9 +176,9 @@ describe('command/update', function () {
     it('should keep the original one if no update', function () {
         repo.prepare();
         gitInitialCommit();
-        return install([gitpkg.path]).then(function() {
+        return install([gitpkg.path]).then(function () {
             t.include(repo.read('package/version.txt'), '1.0.0');
-            return update().then(function() {
+            return update().then(function () {
                 t.include(repo.read('package/version.txt'), '1.0.0');
             });
         });

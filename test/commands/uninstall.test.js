@@ -30,6 +30,23 @@ describe('command/uninstall', function () {
         repo.prepare();
     });
 
+    it('should run preuninstall hook', function () {
+        pkg.prepare({
+            'npd.json': {
+                scripts: {
+                    preuninstall: 'bash -c "echo -n package > ../preuninstall.txt"'
+                }
+            }
+        });
+        return install([pkg.path]).then(function () {
+            t.isTrue(repo.exists('package'));
+            return uninstall(['package']).then(function () {
+                t.isFalse(repo.exists('package'));
+                t.isTrue(repo.exists('preuninstall.txt'));
+            });
+        });
+    });
+
     it('should not remove anything from repo if not exists', function () {
         return install([pkg.path]).then(function () {
             t.include(repo.read('package/version.txt'), '1.0.0');
