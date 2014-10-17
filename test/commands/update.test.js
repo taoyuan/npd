@@ -61,7 +61,7 @@ describe('command/update', function () {
                 'say-hello.js': 'console.log("hello");',
                 'version.txt': '1.0.0'
             }
-        })
+        });
     };
 
     var gitUpdateCommit = function () {
