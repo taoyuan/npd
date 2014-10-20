@@ -1,7 +1,6 @@
 var _ = require('lodash');
 var t = require('chai').assert;
 var object = require('mout').object;
-var ini = require('ini');
 var npd = require('../../lib/npd');
 var h = require('../helpers');
 
