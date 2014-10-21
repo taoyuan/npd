@@ -79,29 +79,29 @@ describe('command/install', function () {
         });
     });
 
-    it('display the output of hook scripts', function (next) {
-        pkg.prepare({
-            'npd.json': {
-                scripts: {
-                    postinstall: 'bash -c "echo foobar"'
-                }
-            }
-        });
-
-        repo.prepare();
-
-        var lastAction = null;
-
-        npd.load(opts, true);
-        installLogger([pkg.path]).intercept(function (log) {
-            if (log.level === 'action') {
-                lastAction = log;
-            }
-        }).on('end', function () {
-            t.equal(lastAction.message, 'foobar');
-            next();
-        });
-    });
+//    it.only('display the output of hook scripts', function (next) {
+//        pkg.prepare({
+//            'npd.json': {
+//                scripts: {
+//                    postinstall: 'bash -c "echo foobar"'
+//                }
+//            }
+//        });
+//
+//        repo.prepare();
+//
+//        var lastAction = null;
+//
+//        npd.load(opts, true);
+//        installLogger([pkg.path]).intercept(function (log) {
+//            if (log.level === 'action') {
+//                lastAction = log;
+//            }
+//        }).on('end', function () {
+//            t.equal(lastAction.message, 'foobar');
+//            next();
+//        });
+//    });
 
     it('works for git repositories', function () {
         gitpkg.gitPrepare({
