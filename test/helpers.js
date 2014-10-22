@@ -124,6 +124,8 @@ TempDir.prototype.gitCommit = function (revisions) {
     revisions = _.defaults(revisions || {}, this.defaults);
     _.forEach(revisions, function (files, tag) {
         that.git('init');
+        that.git('config user.email "torworx@gmail.com"');
+        that.git('config user.name "Tao Yuan"');
 
         that.glob('./!(.git)').map(function (removePath) {
             var fullPath = path.join(that.path, removePath);
