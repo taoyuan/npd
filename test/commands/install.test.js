@@ -79,6 +79,23 @@ describe('command/install', function () {
         });
     });
 
+    it('should parse env in hook scripts', function () {
+        pkg.prepare({
+            'npd.json': {
+                scripts: {
+                    preinstall: 'bash -c "echo -n $UID > preinstall.txt"'
+                }
+            }
+        });
+
+        repo.prepare();
+
+        npd.load(_.assign({UID: 'taoyuan'}, opts), true);
+        return install([pkg.path]).then(function () {
+            t.equal(repo.read('package/preinstall.txt'), 'taoyuan');
+        });
+    });
+
 //    it.only('display the output of hook scripts', function (next) {
 //        pkg.prepare({
 //            'npd.json': {
