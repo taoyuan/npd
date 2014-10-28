@@ -582,11 +582,25 @@ describe('resolverFactory', function () {
             .done();
     });
 
-    it('should use the configured shorthand resolver', function (next) {
+    it('should support shorthand source', function () {
+        return callFactory({ source: '@github:bower/bower' })
+            .then(function (resolver) {
+                t.equal(resolver.getSource(), 'git://github.com/bower/bower.git');
+            });
+    });
+
+    it('should support aliased shorthand source', function () {
+        return callFactory({ source: '@gh:bower/bower' })
+            .then(function (resolver) {
+                t.equal(resolver.getSource(), 'git://github.com/bower/bower.git');
+            });
+    });
+
+    it('should use the configured url host resolver', function (next) {
         callFactory({ source: 'bower/bower' })
             .then(function (resolver) {
                 var config = {
-                    shorthand: 'git://bower.io/{{owner}}/{{package}}/{{shorthand}}'
+                    host: 'git://bower.io/{{owner}}/{{package}}/{{shorthand}}'
                 };
 
                 t.equal(resolver.getSource(), 'git://github.com/bower/bower.git');

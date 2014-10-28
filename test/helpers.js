@@ -63,7 +63,7 @@ exports.command = function (cmd, options) {
 
 exports.commandForLogger = function (cmd, options) {
     return function (packages, config) {
-        if (!(config instanceof npdconf.Configure)) {
+        if (!(config instanceof npdconf.Config)) {
             config = object.merge(options || {}, config);
         }
         var logger = npd.commands[cmd](packages, config);
