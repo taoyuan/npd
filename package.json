@@ -1,6 +1,6 @@
 {
   "name": "npd",
-  "version": "0.1.25",
+  "version": "0.1.27",
   "main": "index.js",
   "description": "Node Packages Deployer",
   "homepage": "https://github.com/taoyuan/npd",
