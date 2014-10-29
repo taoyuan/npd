@@ -161,13 +161,13 @@ describe('command/update', function () {
         gitInitialCommit();
         return install([gitpkg.path]).then(function () {
             t.include(repo.read('package/version.txt'), '1.0.0');
-            t.isTrue(repo.exists('bin/npd-a'));
-            t.isFalse(repo.exists('bin/npd-b'));
+            t.isTrue(repo.exists('.bin/npd-a'));
+            t.isFalse(repo.exists('.bin/npd-b'));
             gitUpdateCommit();
             return update().then(function () {
                 t.include(repo.read('package/version.txt'), '1.0.1');
-                t.isFalse(repo.exists('bin/npd-a'));
-                t.isTrue(repo.exists('bin/npd-b'));
+                t.isFalse(repo.exists('.bin/npd-a'));
+                t.isTrue(repo.exists('.bin/npd-b'));
             });
         });
     });

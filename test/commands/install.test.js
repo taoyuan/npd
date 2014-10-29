@@ -144,6 +144,25 @@ describe('command/install', function () {
         });
     });
 
+    it('should not link any bins when no-bin-links specified', function () {
+        pkg.prepare({
+            'package.json': {
+                name: 'package',
+                bin: {
+                    'npd-bin-test': './npd-bin-test.js'
+                }
+            },
+            'npd-bin-test.js': 'console.log("npd bin test");'
+        });
+
+        repo.prepare();
+
+        npd.load(_.assign({noBinLinks: true}, opts), true);
+        return install([pkg.path]).then(function () {
+            t.isFalse(repo.exists('.bin/npd-bin-test'));
+        });
+    });
+
     it('should link bins to local', function () {
         pkg.prepare({
             'package.json': {
@@ -157,9 +176,9 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        npd.load(_.assign({ prefix: repo.path }, opts), true);
+        npd.load(opts, true);
         return install([pkg.path]).then(function () {
-            t.isTrue(repo.exists('bin/npd-bin-test'));
+            t.isTrue(repo.exists('.bin/npd-bin-test'));
         });
     });
 
