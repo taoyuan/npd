@@ -20,7 +20,7 @@ describe('command/uninstall', function () {
             'version.txt': '1.0.0'
         }).prepare();
 
-        npd.load({dir: repo.path}, true);
+        npd.load({dir: repo.path});
 
         install = h.command('install');
         uninstall = h.command('uninstall');
@@ -87,9 +87,8 @@ describe('command/uninstall', function () {
 
         repo.prepare();
 
-        npd.load({dir: repo.path}, true);
         var binpath = path.resolve(npd.config.bin, 'npd-bin-test');
-        return install([pkg.path]).then(function () {
+        return install([pkg.path], {dir: repo.path}).then(function () {
             t.isTrue(fs.existsSync(binpath));
             return uninstall(['package']).then(function () {
                 t.isFalse(fs.existsSync(binpath));

@@ -53,20 +53,17 @@ exports.expectEvent = function (emitter, eventName) {
     return deferred.promise;
 };
 
-exports.command = function (cmd, options) {
-    var fn = exports.commandForLogger(cmd, options);
-    return function (packages, config) {
-        var logger = fn(packages, config);
+exports.command = function (cmd) {
+    var fn = exports.commandForLogger(cmd);
+    return function (packages, opts) {
+        var logger = fn(packages, opts);
         return exports.expectEvent(logger, 'end');
     };
 };
 
-exports.commandForLogger = function (cmd, options) {
-    return function (packages, config) {
-        if (!(config instanceof npdconf.Config)) {
-            config = object.merge(options || {}, config);
-        }
-        var logger = npd.commands[cmd](packages, config);
+exports.commandForLogger = function (cmd) {
+    return function (packages, opts) {
+        var logger = npd.commands[cmd](packages, opts);
         logger.once('end', function () {
             Repository.clearRuntimeCache();
         });

@@ -17,7 +17,7 @@ describe('command/update', function () {
         gitpkg = new h.TempDir();
 
         opts = {cwd: repo.path};
-        npd.load(opts, true);
+        npd.load(opts);
         install = h.command('install');
         update = h.command('update');
         updateLogger = h.commandForLogger('update');
@@ -98,8 +98,7 @@ describe('command/update', function () {
 
         repo.prepare();
 
-        npd.load(opts, true);
-        return install([pkg.path]).then(function () {
+        return install([pkg.path], opts).then(function () {
             repo.prepare();
 
             return update().then(function () {
@@ -112,9 +111,8 @@ describe('command/update', function () {
     it('should run preinstall hook when updating a package', function () {
         repo.prepare();
 
-        npd.load(opts, true);
         gitInitialCommit();
-        return install([gitpkg.path]).then(function () {
+        return install([gitpkg.path], opts).then(function () {
             t.equal(repo.read('package/preinstall.txt'), '1.0.0');
             repo.remove('package/preinstall.txt');
             t.isFalse(repo.exists('package/preinstall.txt'));
@@ -128,9 +126,8 @@ describe('command/update', function () {
     it('should run postinstall hook when updating a package', function () {
         repo.prepare();
 
-        npd.load(opts, true);
         gitInitialCommit();
-        return install([gitpkg.path]).then(function () {
+        return install([gitpkg.path], opts).then(function () {
             t.equal(repo.read('package/postinstall.txt'), '1.0.0');
             repo.remove('package/postinstall.txt');
             t.isFalse(repo.exists('package/postinstall.txt'));
@@ -144,9 +141,8 @@ describe('command/update', function () {
     it('should run preuninstall hook when updating a package', function () {
         repo.prepare();
 
-        npd.load(opts, true);
         gitInitialCommit();
-        return install([gitpkg.path]).then(function () {
+        return install([gitpkg.path], opts).then(function () {
             gitUpdateCommit();
             return update().then(function () {
                 t.equal(repo.read('preuninstall.txt'), '1.0.0');
@@ -157,9 +153,8 @@ describe('command/update', function () {
 
     it('should update a package to latest version', function () {
         repo.prepare();
-        npd.load(_.assign({ prefix: repo.path }, opts), true);
         gitInitialCommit();
-        return install([gitpkg.path]).then(function () {
+        return install([gitpkg.path], _.assign({ prefix: repo.path }, opts)).then(function () {
             t.include(repo.read('package/version.txt'), '1.0.0');
             t.isTrue(repo.exists('.bin/npd-a'));
             t.isFalse(repo.exists('.bin/npd-b'));

@@ -40,8 +40,7 @@ describe('command/install', function () {
             '.npdrc': ini.encode({dir: repo.path})
         });
 
-        npd.load(opts, true);
-        return install([pkg.path]).then(function () {
+        return install([pkg.path], opts).then(function () {
             t.equal(repo.read('package/foo'), 'bar');
         });
     });
@@ -58,8 +57,7 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        npd.load(opts, true);
-        return install([pkg.path]).then(function () {
+        return install([pkg.path], opts).then(function () {
             t.equal(repo.read('package/preinstall.txt'), 'package');
         });
     });
@@ -73,8 +71,7 @@ describe('command/install', function () {
             }
         });
 
-        npd.load(opts, true);
-        return install([pkg.path]).then(function () {
+        return install([pkg.path], opts).then(function () {
             t.equal(repo.read('package/postinstall.txt'), 'package');
         });
     });
@@ -90,8 +87,7 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        npd.load(_.assign({UID: 'taoyuan'}, opts), true);
-        return install([pkg.path]).then(function () {
+        return install([pkg.path], _.assign({UID: 'taoyuan'}, opts)).then(function () {
             t.equal(repo.read('package/preinstall.txt'), 'taoyuan');
         });
     });
@@ -138,8 +134,7 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        npd.load(opts, true);
-        return install([gitpkg.path + '#1.0.0']).then(function () {
+        return install([gitpkg.path + '#1.0.0'], opts).then(function () {
             t.equal(repo.read('package/version.txt'), '1.0.0');
         });
     });
@@ -157,8 +152,7 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        npd.load(_.assign({noBinLinks: true}, opts), true);
-        return install([pkg.path]).then(function () {
+        return install([pkg.path], _.assign({noBinLinks: true}, opts)).then(function () {
             t.isFalse(repo.exists('.bin/npd-bin-test'));
         });
     });
@@ -176,8 +170,7 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        npd.load(opts, true);
-        return install([pkg.path]).then(function () {
+        return install([pkg.path], opts).then(function () {
             t.isTrue(repo.exists('.bin/npd-bin-test'));
         });
     });
@@ -195,8 +188,7 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        npd.load({dir: repo.path});
-        return install([pkg.path]).then(function () {
+        return install([pkg.path], {dir: repo.path}).then(function () {
             t.isTrue(fs.existsSync(path.resolve(npd.config.bin, 'npd-bin-test')));
             fs.removeSync(path.resolve(npd.config.bin, 'npd-bin-test'));
         });
@@ -215,8 +207,7 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        npd.load({prefix: repo.path}, true);
-        return install([pkg.path]).then(function () {
+        return install([pkg.path], {prefix: repo.path}).then(function () {
             t.isTrue(repo.exists('bin/npd-bin-test'));
             t.isTrue(repo.exists(npd.config.apps + '/package'));
         });
