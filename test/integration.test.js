@@ -8,7 +8,7 @@ describe.skip('integration', function () {
     var install = h.command('install');
 
     beforeEach(function () {
-        npd.load(true);
+        npd.load({});
     });
 
     it('should work with full future package', function () {
