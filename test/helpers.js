@@ -21,10 +21,10 @@ exports.t = require('chai').assert;
 var env = {
     'GIT_AUTHOR_DATE': 'Sun Apr 7 22:13:13 2013 +0000',
     'GIT_AUTHOR_NAME': 'Yuan Tao',
-    'GIT_AUTHOR_EMAIL': 'erictaoy@gmail.com',
+    'GIT_AUTHOR_EMAIL': 'torworx@gmail.com',
     'GIT_COMMITTER_DATE': 'Sun Apr 7 22:13:13 2013 +0000',
     'GIT_COMMITTER_NAME': 'Yuan Tao',
-    'GIT_COMMITTER_EMAIL': 'erictaoy@gmail.com'
+    'GIT_COMMITTER_EMAIL': 'torworx@gmail.com'
 };
 
 // Preserve the original environment
@@ -101,7 +101,7 @@ TempDir.prototype.gitCommit = function (revisions) {
     revisions = _.defaults(revisions || {}, this.defaults);
     _.forEach(revisions, function (files, tag) {
         that.git('init');
-        that.git('config user.email "erictaoy@gmail.com"');
+        that.git('config user.email "torworx@gmail.com"');
         that.git('config user.name "Tao Yuan"');
 
         that.glob('./!(.git)').map(function (removePath) {
