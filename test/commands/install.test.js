@@ -193,7 +193,7 @@ describe('command/install', function () {
         });
     });
 
-    it('should install to custom prefix', function () {
+    it('should install to custom local prefix', function () {
         pkg.prepare({
             'package.json': {
                 name: 'package',
@@ -207,8 +207,8 @@ describe('command/install', function () {
         repo.prepare();
 
         return install([pkg.path], {prefix: repo.path}).then(function () {
-            t.isTrue(repo.exists('bin/npd-bin-test'));
-            t.isTrue(repo.exists(npd.config.apps + '/package'));
+            t.isTrue(repo.exists('.bin/npd-bin-test'));
+            t.isTrue(repo.exists('package'));
         });
     });
 });
