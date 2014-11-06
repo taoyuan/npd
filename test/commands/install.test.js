@@ -10,6 +10,7 @@ var fs = require('fs-extra');
 var npd = require('../../lib/npd');
 var h = require('../helpers');
 var npdconf = require('../../lib/npdconf');
+var logger = require('../../lib/logs').logger;
 
 describe('command/install', function () {
 
@@ -30,6 +31,10 @@ describe('command/install', function () {
         opts = {prefix: repo.path};
 
         install = h.command('install');
+    });
+
+    afterEach(function () {
+        logger.removeAllListeners();
     });
 
     it('reads .npdrc from cwd', function () {
@@ -90,30 +95,6 @@ describe('command/install', function () {
             t.equal(repo.read('package/preinstall.txt'), process.pid);
         });
     });
-
-//    it.only('display the output of hook scripts', function (next) {
-//        pkg.prepare({
-//            'npd.json': {
-//                scripts: {
-//                    postinstall: 'bash -c "echo foobar"'
-//                }
-//            }
-//        });
-//
-//        repo.prepare();
-//
-//        var lastAction = null;
-//
-//        npd.load(opts, true);
-//        installLogger([pkg.path]).intercept(function (log) {
-//            if (log.level === 'action') {
-//                lastAction = log;
-//            }
-//        }).on('end', function () {
-//            t.equal(lastAction.message, 'foobar');
-//            next();
-//        });
-//    });
 
     it('works for git repositories', function () {
         gitpkg.gitPrepare({
