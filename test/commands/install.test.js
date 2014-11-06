@@ -14,7 +14,7 @@ var npdconf = require('../../lib/npdconf');
 describe('command/install', function () {
 
     var repo, pkg, gitpkg, opts;
-    var install, installLogger;
+    var install;
 
     beforeEach(function () {
         repo = new h.TempDir();
@@ -30,7 +30,6 @@ describe('command/install', function () {
         opts = {cwd: repo.path};
 
         install = h.command('install');
-        installLogger = h.commandForLogger('install');
     });
 
     it('reads .npdrc from cwd', function () {

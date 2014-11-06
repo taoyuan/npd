@@ -1,6 +1,7 @@
 "use strict";
 
 var when = require('when');
+var nfn = require('when/node');
 var _ = require('lodash');
 var object = require('mout').object;
 var path = require('path');
@@ -20,10 +21,10 @@ exports.t = require('chai').assert;
 var env = {
     'GIT_AUTHOR_DATE': 'Sun Apr 7 22:13:13 2013 +0000',
     'GIT_AUTHOR_NAME': 'Yuan Tao',
-    'GIT_AUTHOR_EMAIL': 'torworx@gmail.com',
+    'GIT_AUTHOR_EMAIL': 'erictaoy@gmail.com',
     'GIT_COMMITTER_DATE': 'Sun Apr 7 22:13:13 2013 +0000',
     'GIT_COMMITTER_NAME': 'Yuan Tao',
-    'GIT_COMMITTER_EMAIL': 'torworx@gmail.com'
+    'GIT_COMMITTER_EMAIL': 'erictaoy@gmail.com'
 };
 
 // Preserve the original environment
@@ -43,31 +44,10 @@ after(function () {
     fs.removeSync(tmpLocation);
 });
 
-exports.expectEvent = function (emitter, eventName) {
-    var deferred = when.defer();
-
-    emitter.once(eventName, function () {
-        deferred.resolve(arguments);
-    });
-
-    return deferred.promise;
-};
-
 exports.command = function (cmd) {
-    var fn = exports.commandForLogger(cmd);
+    var fn = npd.commands[cmd];
     return function (packages, opts) {
-        var logger = fn(packages, opts);
-        return exports.expectEvent(logger, 'end');
-    };
-};
-
-exports.commandForLogger = function (cmd) {
-    return function (packages, opts) {
-        var logger = npd.commands[cmd](packages, opts);
-        logger.once('end', function () {
-            Repository.clearRuntimeCache();
-        });
-        return logger;
+        return nfn.call(fn, packages, opts);
     };
 };
 
@@ -121,7 +101,7 @@ TempDir.prototype.gitCommit = function (revisions) {
     revisions = _.defaults(revisions || {}, this.defaults);
     _.forEach(revisions, function (files, tag) {
         that.git('init');
-        that.git('config user.email "torworx@gmail.com"');
+        that.git('config user.email "erictaoy@gmail.com"');
         that.git('config user.name "Tao Yuan"');
 
         that.glob('./!(.git)').map(function (removePath) {
@@ -135,6 +115,9 @@ TempDir.prototype.gitCommit = function (revisions) {
         that.git('commit', '-m"commit"');
         that.git('tag', tag);
     });
+
+    // clear git refs cache in resolvers
+    exports.clearRuntimeCache();
 };
 
 TempDir.prototype.glob = function (pattern) {
@@ -151,7 +134,7 @@ TempDir.prototype.read = function (name) {
 TempDir.prototype.git = function () {
     var args = Array.prototype.slice.call(arguments);
 
-    return sh.execSync('git', args, { cwd: this.path, env: env });
+    return sh.execSync('git', args, { cwd: this.path, env: env, silent: false });
 };
 
 TempDir.prototype.exists = function (name) {

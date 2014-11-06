@@ -19,10 +19,10 @@ var options = nomnom.options({
 var env = {
     'GIT_AUTHOR_DATE': 'Fri Sep 26 10:20:00 2014 +0000',
     'GIT_AUTHOR_NAME': 'Yuan Tao',
-    'GIT_AUTHOR_EMAIL': 'torworx@gmail.com',
+    'GIT_AUTHOR_EMAIL': 'erictaoy@gmail.com',
     'GIT_COMMITTER_DATE': 'Fri Sep 26 10:20:00 2014 +0000',
     'GIT_COMMITTER_NAME': 'Yuan Tao',
-    'GIT_COMMITTER_EMAIL': 'torworx@gmail.com'
+    'GIT_COMMITTER_EMAIL': 'erictaoy@gmail.com'
 };
 
 // Preserve the original environment

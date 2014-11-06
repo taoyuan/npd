@@ -6,7 +6,7 @@ var fs = require('fs-extra');
 var nock = require('nock');
 var when = require('when');
 var nfn = require('when/node');
-var Logger = require('bower-logger');
+var logs = require('../../lib/logs');
 var sh = require('../../lib/utils/sh');
 var UrlResolver = require('../../lib/resolvers/url-resolver');
 var npdconf = require('../../lib/npdconf');
@@ -18,7 +18,7 @@ describe('UrlResolver', function () {
     var config = npdconf();
 
     before(function (next) {
-        logger = new Logger();
+        logger = logs.createLogger();
 
         // Checkout test package version 0.2.1
         sh.exec('git', ['checkout', '0.2.1'], { cwd: testPackage })

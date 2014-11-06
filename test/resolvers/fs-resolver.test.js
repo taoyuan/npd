@@ -3,7 +3,7 @@ var path = require('path');
 var fs = require('fs-extra');
 var when = require('when');
 var nfn = require('when/node');
-var Logger = require('bower-logger');
+var logs = require('../../lib/logs');
 var sh = require('../../lib/utils/sh');
 var copy = require('../../lib/utils/copy');
 var npdconf = require('../../lib/npdconf');
@@ -16,7 +16,7 @@ describe('FsResolver', function () {
     var config = npdconf({dir: process.cwd()});
 
     before(function (next) {
-        logger = new Logger();
+        logger = logs.createLogger();
         // Checkout test package version 0.2.1 which has a package.json
         // with ignores
         sh.exec('git', ['checkout', '0.2.1'], { cwd: testPackage })

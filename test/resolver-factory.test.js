@@ -7,14 +7,14 @@ var path = require('path');
 var mout = require('mout');
 var when = require('when');
 var RegistryClient = require('../lib/registry');
-var Logger = require('bower-logger');
+var logs = require('../lib/logs');
 var resolverFactory = require('../lib/resolver-factory');
 var resolvers = require('../lib/resolvers');
 var npdconf = require('../lib/npdconf');
 
 describe('resolverFactory', function () {
     var tempSource;
-    var logger = new Logger();
+    var logger = logs.createLogger();
     var config = npdconf({dir: process.cwd()});
     var registryClient = new RegistryClient(npdconf({
         cache: config._registry

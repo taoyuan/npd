@@ -6,7 +6,7 @@ var chmodr = require('chmodr');
 var when = require('when');
 var nfn = require('when/node');
 var mout = require('mout');
-var Logger = require('bower-logger');
+var logs = require('../../lib/logs');
 var copy = require('../../lib/utils/copy');
 var GitResolver = require('../../lib/resolvers/git-resolver');
 var npdconf = require('../../lib/npdconf');
@@ -18,7 +18,7 @@ describe('GitResolver', function () {
     var config = npdconf();
 
     before(function () {
-        logger = new Logger();
+        logger =logs.createLogger();
     });
 
     afterEach(function () {
@@ -1070,7 +1070,7 @@ describe('GitResolver', function () {
             resolver._resolution = { type: 'version', tag: '0.0.1' };
             resolver._tempDir = tempDir;
 
-            logger.on('log', function (log) {
+            logger.on('logged', function (log) {
                 t.typeOf(log, 'object');
 
                 if (log.level === 'warn' && log.id === 'mismatch') {

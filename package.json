@@ -74,7 +74,8 @@
     "tmp": "0.0.24",
     "update-notifier": "^0.2.2",
     "when": "^3.4.6",
-    "which": "^1.0.5"
+    "which": "^1.0.5",
+    "wide": "^0.1.0"
   },
   "devDependencies": {
     "chai": "*",

@@ -1,7 +1,7 @@
 var t = require('chai').assert;
 var fs = require('fs-extra');
 var path = require('path');
-var Logger = require('bower-logger');
+var logs = require('../../lib/logs');
 var sh = require('../../lib/utils/sh');
 var copy = require('../../lib/utils/copy');
 var GitFsResolver = require('../../lib/resolvers/git-fs-resolver');
@@ -14,7 +14,7 @@ describe('GitFsResolver', function () {
     var config = npdconf({dir: process.cwd()});
 
     before(function () {
-        logger = new Logger();
+        logger = logs.createLogger();
     });
 
     afterEach(function (next) {

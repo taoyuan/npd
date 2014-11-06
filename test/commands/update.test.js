@@ -7,7 +7,7 @@ var h = require('../helpers');
 describe('command/update', function () {
 
     var repo, pkg, gitpkg, opts;
-    var install, update, updateLogger;
+    var install, update;
 
     beforeEach(function () {
         repo = new h.TempDir();
@@ -20,26 +20,7 @@ describe('command/update', function () {
         npd.load(opts);
         install = h.command('install');
         update = h.command('update');
-        updateLogger = h.commandForLogger('update');
     });
-
-    var files = {
-        'package.json': {
-            name: 'package',
-            bin: {
-                "npd-a": './say-hello.js'
-            }
-        },
-        'npd.json': {
-            scripts: {
-                preinstall: 'bash -c "echo -n package > preinstall.txt"',
-                postinstall: 'bash -c "echo -n package > postinstall.txt"',
-                preuninstall: 'bash -c "echo -n package > ../preuninstall.txt"'
-            }
-        },
-        'say-hello.js': 'console.log("hello");',
-        'version.txt': '1.0.0'
-    };
 
     var gitInitialCommit = function () {
         gitpkg.gitPrepare({
@@ -61,6 +42,7 @@ describe('command/update', function () {
                 'version.txt': '1.0.0'
             }
         });
+        console.log('git init complete');
     };
 
     var gitUpdateCommit = function () {
@@ -82,6 +64,7 @@ describe('command/update', function () {
                 'version.txt': '1.0.1'
             }
         });
+        console.log('git update complete');
     };
 
     it('should not run postinstall when no package is update', function () {

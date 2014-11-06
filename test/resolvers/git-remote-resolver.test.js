@@ -1,7 +1,7 @@
 var t = require('chai').assert;
 var path = require('path');
 var fs = require('fs-extra');
-var Logger = require('bower-logger');
+var logs = require('../../lib/logs');
 var GitRemoteResolver = require('../../lib/resolvers/git-remote-resolver');
 var npdconf = require('../../lib/npdconf');
 
@@ -11,7 +11,7 @@ describe('GitRemoteResolver', function () {
     var config = npdconf();
 
     before(function () {
-        logger = new Logger();
+        logger = logs.createLogger();
     });
 
     afterEach(function () {

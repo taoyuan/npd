@@ -2,7 +2,7 @@ var t = require('chai').assert;
 var path = require('path');
 var nock = require('nock');
 var fs = require('fs-extra');
-var Logger = require('bower-logger');
+var logs = require('../../lib/logs');
 var GitRemoteResolver = require('../../lib/resolvers/git-remote-resolver');
 var GitHubResolver = require('../../lib/resolvers/github-resolver');
 var npdconf = require('../../lib/npdconf');
@@ -13,7 +13,7 @@ describe('GitHub', function () {
     var config = npdconf({ strictSsl: false });
 
     before(function () {
-        logger = new Logger();
+        logger = logs.createLogger();
     });
 
     afterEach(function () {
@@ -78,7 +78,7 @@ describe('GitHub', function () {
                 .get('/IndigoUnited/events-emitter/archive/0.1.0.tar.gz')
                 .reply(200, 'this is not a valid tar');
 
-            logger.on('log', function (entry) {
+            logger.on('logged', function (entry) {
                 if (entry.level === 'warn' && entry.id === 'retry') {
                     retried = true;
                 }
@@ -108,7 +108,7 @@ describe('GitHub', function () {
                 .get('/IndigoUnited/events-emitter/archive/0.1.0.tar.gz')
                 .reply(500);
 
-            logger.on('log', function (entry) {
+            logger.on('logged', function (entry) {
                 if (entry.level === 'warn' && entry.id === 'retry') {
                     retried = true;
                 }
