@@ -13,7 +13,7 @@ describe('FsResolver', function () {
     var tempSource;
     var logger;
     var testPackage = path.resolve(__dirname, '../fixtures/package-a');
-    var config = npdconf({dir: process.cwd()});
+    var config = npdconf();
 
     before(function (next) {
         logger = logs.createLogger();

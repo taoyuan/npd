@@ -15,7 +15,7 @@ var npdconf = require('../lib/npdconf');
 describe('resolverFactory', function () {
     var tempSource;
     var logger = logs.createLogger();
-    var config = npdconf({dir: process.cwd()});
+    var config = npdconf({prefix: process.cwd()});
     var registryClient = new RegistryClient(npdconf({
         cache: config._registry
     }));
@@ -36,7 +36,7 @@ describe('resolverFactory', function () {
     });
 
     function callFactory(endpoint, config) {
-        config = _.assign({dir: process.cwd()}, config);
+        config = _.assign({prefix: process.cwd()}, config);
         return resolverFactory(endpoint, npdconf(config), logger, registryClient);
     }
 

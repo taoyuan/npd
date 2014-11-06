@@ -16,7 +16,7 @@ describe('command/update', function () {
 
         gitpkg = new h.TempDir();
 
-        opts = {cwd: repo.path};
+        opts = {prefix: repo.path};
         npd.load(opts);
         install = h.command('install');
         update = h.command('update');

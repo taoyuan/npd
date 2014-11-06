@@ -27,7 +27,7 @@ describe('command/install', function () {
 
         gitpkg = new h.TempDir();
 
-        opts = {cwd: repo.path};
+        opts = {prefix: repo.path};
 
         install = h.command('install');
     });
@@ -36,7 +36,7 @@ describe('command/install', function () {
         pkg.prepare({ foo: 'bar' });
 
         repo.prepare({
-            '.npdrc': ini.encode({dir: repo.path})
+            '.npdrc': ini.encode({prefix: repo.path})
         });
 
         return install([pkg.path], opts).then(function () {
@@ -187,7 +187,7 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        return install([pkg.path], {dir: repo.path}).then(function () {
+        return install([pkg.path], {prefix: repo.path}).then(function () {
             t.isTrue(fs.existsSync(path.resolve(npd.config.bin, 'npd-bin-test')));
             fs.removeSync(path.resolve(npd.config.bin, 'npd-bin-test'));
         });
