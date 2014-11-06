@@ -188,8 +188,8 @@ describe('command/install', function () {
         repo.prepare();
 
         return install([pkg.path], {prefix: repo.path, global: true}).then(function () {
-            t.isTrue(repo.exists('bin/npd-bin-test'));
-            t.isTrue(repo.exists('apps/package'));
+            t.isTrue(fs.existsSync(path.join(npd.config.bin, 'npd-bin-test')));
+            t.isTrue(fs.existsSync(path.join(npd.config.dir, 'package')));
         });
     });
 

@@ -128,7 +128,7 @@ TempDir.prototype.glob = function (pattern) {
 };
 
 TempDir.prototype.read = function (name) {
-    return fs.readFileSync(path.join(this.path, name), 'utf8');
+    return fs.readFileSync(path.join(this.path, npd.config.silo, name), 'utf8');
 };
 
 TempDir.prototype.git = function () {
@@ -138,9 +138,9 @@ TempDir.prototype.git = function () {
 };
 
 TempDir.prototype.exists = function (name) {
-    return fs.existsSync(path.join(this.path, name));
+    return fs.existsSync(path.join(this.path, npd.config.silo, name));
 };
 
 TempDir.prototype.remove = function (name) {
-    return fs.removeSync(path.join(this.path, name));
+    return fs.removeSync(path.join(this.path, npd.config.silo, name));
 };
