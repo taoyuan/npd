@@ -79,15 +79,15 @@ describe('command/install', function () {
         pkg.prepare({
             'npd.json': {
                 scripts: {
-                    preinstall: 'bash -c "echo -n $UID > preinstall.txt"'
+                    preinstall: 'bash -c "echo -n $NPD_PID > preinstall.txt"'
                 }
             }
         });
 
         repo.prepare();
 
-        return install([pkg.path], _.assign({UID: 'taoyuan'}, opts)).then(function () {
-            t.equal(repo.read('package/preinstall.txt'), 'taoyuan');
+        return install([pkg.path], opts).then(function () {
+            t.equal(repo.read('package/preinstall.txt'), process.pid);
         });
     });
 
