@@ -32,44 +32,44 @@ describe('command/uninstall', function () {
 
     it('should run preuninstall hook', function () {
         pkg.prepare({
-            'npd.json': {
+            'module.json': {
                 scripts: {
                     preuninstall: 'bash -c "echo -n package > ../preuninstall.txt"'
                 }
             }
         });
         return install([pkg.path]).then(function () {
-            t.isTrue(repo.exists('package'));
+            t.isTrue(repo.exists(npd.config.silo, 'package'));
             return uninstall(['package']).then(function () {
-                t.isFalse(repo.exists('package'));
-                t.isTrue(repo.exists('preuninstall.txt'));
+                t.isFalse(repo.exists(npd.config.silo, 'package'));
+                t.isTrue(repo.exists(npd.config.silo, 'preuninstall.txt'));
             });
         });
     });
 
     it('should not remove anything from repo if not exists', function () {
         return install([pkg.path]).then(function () {
-            t.include(repo.read('package/version.txt'), '1.0.0');
+            t.include(repo.read(npd.config.silo, 'package/version.txt'), '1.0.0');
             return uninstall(['unknown']).then(function () {
-                t.isTrue(repo.exists('package'));
+                t.isTrue(repo.exists(npd.config.silo, 'package'));
             });
         });
     });
 
     it('should not remove anything from repo if no packages provided', function () {
         return install([pkg.path]).then(function () {
-            t.include(repo.read('package/version.txt'), '1.0.0');
+            t.include(repo.read(npd.config.silo, 'package/version.txt'), '1.0.0');
             return uninstall().then(function () {
-                t.isTrue(repo.exists('package'));
+                t.isTrue(repo.exists(npd.config.silo, 'package'));
             });
         });
     });
 
     it('should remove installed package from repo', function () {
         return install([pkg.path]).then(function () {
-            t.include(repo.read('package/version.txt'), '1.0.0');
+            t.include(repo.read(npd.config.silo, 'package/version.txt'), '1.0.0');
             return uninstall(['package']).then(function () {
-                t.isFalse(repo.exists('package'));
+                t.isFalse(repo.exists(npd.config.silo, 'package'));
             });
         });
     });

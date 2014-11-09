@@ -14,6 +14,8 @@ var npd = require('../lib/npd');
 var npdconf = require('../lib/npdconf');
 var Repository = require('../lib/repository');
 
+var __slice = Array.prototype.slice;
+
 require('chai').config.includeStack = true;
 exports.t = require('chai').assert;
 
@@ -30,7 +32,7 @@ var env = {
 // Preserve the original environment
 _.assign(env, process.env);
 
-var tmpLocation = path.join(osenv.tmpdir(), 'npd-tests', uuid.v4().slice(0, 8));
+var tmpLocation = path.join(osenv.tmpdir(), 'npd-tests');
 
 exports.require = function (name) {
     return require(path.join(__dirname, '../', name));
@@ -56,7 +58,7 @@ exports.TempDir = function (defaults) {
 };
 
 function TempDir (defaults) {
-    this.path = path.join(tmpLocation, uuid.v4());
+    this.path = path.join(tmpLocation, uuid.v4().slice(0, 8));
     this.defaults = defaults;
 }
 
@@ -127,9 +129,6 @@ TempDir.prototype.glob = function (pattern) {
     });
 };
 
-TempDir.prototype.read = function (name) {
-    return fs.readFileSync(path.join(this.path, npd.config.silo, name), 'utf8');
-};
 
 TempDir.prototype.git = function () {
     var args = Array.prototype.slice.call(arguments);
@@ -137,10 +136,16 @@ TempDir.prototype.git = function () {
     return sh.execSync('git', args, { cwd: this.path, env: env, silent: false });
 };
 
-TempDir.prototype.exists = function (name) {
-    return fs.existsSync(path.join(this.path, npd.config.silo, name));
+TempDir.prototype.read = function () {
+    var args = [this.path].concat(__slice.call(arguments));
+    return fs.readFileSync(path.join.apply(undefined, args), 'utf8');
 };
 
-TempDir.prototype.remove = function (name) {
-    return fs.removeSync(path.join(this.path, npd.config.silo, name));
+TempDir.prototype.exists = function () {
+    var args = [this.path].concat(__slice.call(arguments));
+    return fs.existsSync(path.join.apply(undefined, args));
+};
+
+TempDir.prototype.remove = function () {var args = [this.path].concat(__slice.call(arguments));
+    return fs.removeSync(path.join.apply(undefined, args));
 };

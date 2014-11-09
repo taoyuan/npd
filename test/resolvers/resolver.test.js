@@ -659,7 +659,7 @@ describe('Resolver', function () {
 
             fs.mkdirpSync(tempDir);
 
-            // Checkout test package version 0.2.1 which has a npd.json
+            // Checkout test package version 0.2.1 which has a module.json
             // with ignores
             sh.exec('git', ['checkout', '0.2.2'], { cwd: testPackage })
                 // Copy its contents to the temporary dir

@@ -31,7 +31,7 @@ describe('command/update', function () {
                         "npd-a": './say-hello.js'
                     }
                 },
-                'npd.json': {
+                'module.json': {
                     scripts: {
                         preinstall: 'bash -c "echo -n 1.0.0 > preinstall.txt"',
                         postinstall: 'bash -c "echo -n 1.0.0 > postinstall.txt"',
@@ -54,7 +54,7 @@ describe('command/update', function () {
                         "npd-b": './say-hello.js'
                     }
                 },
-                'npd.json': {
+                'module.json': {
                     scripts: {
                         preinstall: 'bash -c "echo -n 1.0.1 > preinstall.txt"',
                         postinstall: 'bash -c "echo -n 1.0.1 > postinstall.txt"'
@@ -72,7 +72,7 @@ describe('command/update', function () {
             'package.json': {
                 name: 'package'
             },
-            'npd.json': {
+            'module.json': {
                 scripts: {
                     postinstall: 'bash -c "echo -n package > postinstall.txt"'
                 }
@@ -85,7 +85,7 @@ describe('command/update', function () {
             repo.prepare();
 
             return update().then(function () {
-                t.isFalse(repo.exists('package/postinstall.txt'));
+                t.isFalse(repo.exists(npd.config.silo, 'package/postinstall.txt'));
             });
         });
     });
@@ -96,12 +96,12 @@ describe('command/update', function () {
 
         gitInitialCommit();
         return install([gitpkg.path], opts).then(function () {
-            t.equal(repo.read('package/preinstall.txt'), '1.0.0');
-            repo.remove('package/preinstall.txt');
-            t.isFalse(repo.exists('package/preinstall.txt'));
+            t.equal(repo.read(npd.config.silo, 'package/preinstall.txt'), '1.0.0');
+            repo.remove(npd.config.silo, 'package/preinstall.txt');
+            t.isFalse(repo.exists(npd.config.silo, 'package/preinstall.txt'));
             gitUpdateCommit();
             return update().then(function () {
-                t.equal(repo.read('package/preinstall.txt'), '1.0.1');
+                t.equal(repo.read(npd.config.silo, 'package/preinstall.txt'), '1.0.1');
             });
         });
     });
@@ -111,12 +111,12 @@ describe('command/update', function () {
 
         gitInitialCommit();
         return install([gitpkg.path], opts).then(function () {
-            t.equal(repo.read('package/postinstall.txt'), '1.0.0');
-            repo.remove('package/postinstall.txt');
-            t.isFalse(repo.exists('package/postinstall.txt'));
+            t.equal(repo.read(npd.config.silo, 'package/postinstall.txt'), '1.0.0');
+            repo.remove(npd.config.silo, 'package/postinstall.txt');
+            t.isFalse(repo.exists(npd.config.silo, 'package/postinstall.txt'));
             gitUpdateCommit();
             return update().then(function () {
-                t.equal(repo.read('package/postinstall.txt'), '1.0.1');
+                t.equal(repo.read(npd.config.silo, 'package/postinstall.txt'), '1.0.1');
             });
         });
     });
@@ -128,7 +128,7 @@ describe('command/update', function () {
         return install([gitpkg.path], opts).then(function () {
             gitUpdateCommit();
             return update().then(function () {
-                t.equal(repo.read('preuninstall.txt'), '1.0.0');
+                t.equal(repo.read(npd.config.silo, 'preuninstall.txt'), '1.0.0');
             });
         });
     });
@@ -138,14 +138,14 @@ describe('command/update', function () {
         repo.prepare();
         gitInitialCommit();
         return install([gitpkg.path], _.assign({ prefix: repo.path }, opts)).then(function () {
-            t.include(repo.read('package/version.txt'), '1.0.0');
-            t.isTrue(repo.exists('.bin/npd-a'));
-            t.isFalse(repo.exists('.bin/npd-b'));
+            t.include(repo.read(npd.config.silo, 'package/version.txt'), '1.0.0');
+            t.isTrue(repo.exists(npd.config.silo, '.bin/npd-a'));
+            t.isFalse(repo.exists(npd.config.silo, '.bin/npd-b'));
             gitUpdateCommit();
             return update().then(function () {
-                t.include(repo.read('package/version.txt'), '1.0.1');
-                t.isFalse(repo.exists('.bin/npd-a'));
-                t.isTrue(repo.exists('.bin/npd-b'));
+                t.include(repo.read(npd.config.silo, 'package/version.txt'), '1.0.1');
+                t.isFalse(repo.exists(npd.config.silo, '.bin/npd-a'));
+                t.isTrue(repo.exists(npd.config.silo, '.bin/npd-b'));
             });
         });
     });
@@ -154,9 +154,9 @@ describe('command/update', function () {
         repo.prepare();
         gitInitialCommit();
         return install([gitpkg.path]).then(function () {
-            t.include(repo.read('package/version.txt'), '1.0.0');
+            t.include(repo.read(npd.config.silo, 'package/version.txt'), '1.0.0');
             return update().then(function () {
-                t.include(repo.read('package/version.txt'), '1.0.0');
+                t.include(repo.read(npd.config.silo, 'package/version.txt'), '1.0.0');
             });
         });
     });

@@ -45,14 +45,14 @@ describe('command/install', function () {
         });
 
         return install([pkg.path], opts).then(function () {
-            t.equal(repo.read('package/foo'), 'bar');
+            t.equal(repo.read('modules/package/foo'), 'bar');
         });
     });
 
 
     it('runs preinstall hook', function () {
         pkg.prepare({
-            'npd.json': {
+            'module.json': {
                 scripts: {
                     preinstall: 'bash -c "echo -n package > preinstall.txt"'
                 }
@@ -62,13 +62,13 @@ describe('command/install', function () {
         repo.prepare();
 
         return install([pkg.path], opts).then(function () {
-            t.equal(repo.read('package/preinstall.txt'), 'package');
+            t.equal(repo.read('modules/package/preinstall.txt'), 'package');
         });
     });
 
     it('runs postinstall hook', function () {
         pkg.prepare({
-            'npd.json': {
+            'module.json': {
                 scripts: {
                     postinstall: 'bash -c "echo -n package > postinstall.txt"'
                 }
@@ -76,13 +76,13 @@ describe('command/install', function () {
         });
 
         return install([pkg.path], opts).then(function () {
-            t.equal(repo.read('package/postinstall.txt'), 'package');
+            t.equal(repo.read('modules/package/postinstall.txt'), 'package');
         });
     });
 
     it('should parse env in hook scripts', function () {
         pkg.prepare({
-            'npd.json': {
+            'module.json': {
                 scripts: {
                     preinstall: 'bash -c "echo -n $NPD_PID > preinstall.txt"'
                 }
@@ -92,7 +92,7 @@ describe('command/install', function () {
         repo.prepare();
 
         return install([pkg.path], opts).then(function () {
-            t.equal(repo.read('package/preinstall.txt'), process.pid);
+            t.equal(repo.read('modules/package/preinstall.txt'), process.pid);
         });
     });
 
@@ -115,7 +115,7 @@ describe('command/install', function () {
         repo.prepare();
 
         return install([gitpkg.path + '#1.0.0'], opts).then(function () {
-            t.equal(repo.read('package/version.txt'), '1.0.0');
+            t.equal(repo.read('modules/package/version.txt'), '1.0.0');
         });
     });
 
@@ -132,8 +132,8 @@ describe('command/install', function () {
 
         repo.prepare();
 
-        return install([pkg.path], _.assign({noBinLinks: true}, opts)).then(function () {
-            t.isFalse(repo.exists('.bin/npd-bin-test'));
+        return install([pkg.path], _.assign({"bin-links": false}, opts)).then(function () {
+            t.isFalse(repo.exists('modules/.bin/npd-bin-test'));
         });
     });
 
@@ -151,11 +151,11 @@ describe('command/install', function () {
         repo.prepare();
 
         return install([pkg.path], opts).then(function () {
-            t.isTrue(repo.exists('.bin/npd-bin-test'));
+            t.isTrue(repo.exists('modules/.bin/npd-bin-test'));
         });
     });
 
-    it('should link bins to global', function () {
+    it.only('should link bins to global', function () {
         pkg.prepare({
             'package.json': {
                 name: 'package',
@@ -188,8 +188,8 @@ describe('command/install', function () {
         repo.prepare();
 
         return install([pkg.path], {prefix: repo.path}).then(function () {
-            t.isTrue(repo.exists('.bin/npd-bin-test'));
-            t.isTrue(repo.exists('package'));
+            t.isTrue(repo.exists('modules/.bin/npd-bin-test'));
+            t.isTrue(repo.exists('modules/package'));
         });
     });
 });
