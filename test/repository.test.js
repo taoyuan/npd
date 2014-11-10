@@ -103,12 +103,12 @@ describe('Repository', function () {
             };
 
             repository.fetch({ name: '', source: 'foo', target: '~0.1.0' })
-                .spread(function (canonicalDir, pkgMeta) {
+                .spread(function (canonicalDir, pkgmeta) {
                     t.isTrue(called);
                     t.isTrue(fs.existsSync(canonicalDir));
-                    t.typeOf(pkgMeta, 'object');
-                    t.equal(pkgMeta.name, 'package-a');
-                    t.equal(pkgMeta.version, '0.1.1');
+                    t.typeOf(pkgmeta, 'object');
+                    t.equal(pkgmeta.name, 'package-a');
+                    t.equal(pkgmeta.version, '0.1.1');
                     next();
                 })
                 .done();
@@ -138,12 +138,12 @@ describe('Repository', function () {
 
             repository._config.force = true;
             repository.fetch({ name: '', source: 'foo', target: ' ~0.1.0' })
-                .spread(function (canonicalDir, pkgMeta) {
+                .spread(function (canonicalDir, pkgmeta) {
                     t.deepEqual(called, ['resolve']);
                     t.isTrue(fs.existsSync(canonicalDir));
-                    t.typeOf(pkgMeta, 'object');
-                    t.equal(pkgMeta.name, 'package-a');
-                    t.equal(pkgMeta.version, '0.1.1');
+                    t.typeOf(pkgmeta, 'object');
+                    t.equal(pkgmeta.name, 'package-a');
+                    t.equal(pkgmeta.version, '0.1.1');
                     next();
                 })
                 .done();
@@ -160,12 +160,12 @@ describe('Repository', function () {
             };
 
             repository.fetch({ name: '', source: 'foo', target: '~0.1.0' })
-                .spread(function (canonicalDir, pkgMeta) {
+                .spread(function (canonicalDir, pkgmeta) {
                     t.isTrue(called);
                     t.isTrue(fs.existsSync(canonicalDir));
-                    t.typeOf(pkgMeta, 'object');
-                    t.equal(pkgMeta.name, 'package-a');
-                    t.equal(pkgMeta.version, '0.1.1');
+                    t.typeOf(pkgmeta, 'object');
+                    t.equal(pkgmeta.name, 'package-a');
+                    t.equal(pkgmeta.version, '0.1.1');
                     next();
                 })
                 .done();
@@ -184,12 +184,12 @@ describe('Repository', function () {
             };
 
             repository.fetch({ name: '', source: testPackage, target: '~0.1.0' })
-                .spread(function (canonicalDir, pkgMeta) {
+                .spread(function (canonicalDir, pkgmeta) {
                     t.isFalse(called);
                     t.isTrue(fs.existsSync(canonicalDir));
-                    t.typeOf(pkgMeta, 'object');
-                    t.equal(pkgMeta.name, 'package-a');
-                    t.equal(pkgMeta.version, '0.1.1');
+                    t.typeOf(pkgmeta, 'object');
+                    t.equal(pkgmeta.name, 'package-a');
+                    t.equal(pkgmeta.version, '0.1.1');
                     forceCaching = true;
                     next();
                 })
@@ -217,12 +217,12 @@ describe('Repository', function () {
             };
 
             repository.fetch({ name: '', source: 'foo', target: ' ~0.1.0' })
-                .spread(function (canonicalDir, pkgMeta) {
+                .spread(function (canonicalDir, pkgmeta) {
                     t.deepEqual(called, ['resolve']);
                     t.isTrue(fs.existsSync(canonicalDir));
-                    t.typeOf(pkgMeta, 'object');
-                    t.equal(pkgMeta.name, 'package-a');
-                    t.equal(pkgMeta.version, '0.1.1');
+                    t.typeOf(pkgmeta, 'object');
+                    t.equal(pkgmeta.name, 'package-a');
+                    t.equal(pkgmeta.version, '0.1.1');
                     next();
                 })
                 .done();
@@ -238,9 +238,9 @@ describe('Repository', function () {
             resolverFactoryHook = function (resolver) {
                 var originalHasNew = resolver.hasNew;
 
-                resolver.hasNew = function (canonicalDir, pkgMeta) {
+                resolver.hasNew = function (canonicalDir, pkgmeta) {
                     t.equal(canonicalDir, tempPackage);
-                    t.deepEqual(pkgMeta, json);
+                    t.deepEqual(pkgmeta, json);
                     called = true;
                     return originalHasNew.apply(this, arguments);
                 };
@@ -255,12 +255,12 @@ describe('Repository', function () {
                     fs.writeFileSync(path.join(tempPackage, '.bower.json'), JSON.stringify(json));
 
                     return repository.fetch({ name: '', source: 'foo', target: '~0.1.0' })
-                        .spread(function (canonicalDir, pkgMeta) {
+                        .spread(function (canonicalDir, pkgmeta) {
                             t.isTrue(called);
                             t.isTrue(fs.existsSync(canonicalDir));
-                            t.typeOf(pkgMeta, 'object');
-                            t.equal(pkgMeta.name, 'package-a');
-                            t.equal(pkgMeta.version, '0.1.1');
+                            t.typeOf(pkgmeta, 'object');
+                            t.equal(pkgmeta.name, 'package-a');
+                            t.equal(pkgmeta.version, '0.1.1');
                             next();
                         });
                 })
@@ -282,9 +282,9 @@ describe('Repository', function () {
                     return originalResolve.apply(this, arguments);
                 };
 
-                resolver.hasNew = function (canonicalDir, pkgMeta) {
+                resolver.hasNew = function (canonicalDir, pkgmeta) {
                     t.equal(canonicalDir, tempPackage);
-                    t.deepEqual(pkgMeta, json);
+                    t.deepEqual(pkgmeta, json);
                     called.push('hasNew');
                     return when.resolve(true);
                 };
@@ -299,12 +299,12 @@ describe('Repository', function () {
                     fs.writeFileSync(path.join(tempPackage, '.bower.json'), JSON.stringify(json));
 
                     return repository.fetch({ name: '', source: 'foo', target: '~0.2.0' })
-                        .spread(function (canonicalDir, pkgMeta) {
+                        .spread(function (canonicalDir, pkgmeta) {
                             t.deepEqual(called, ['hasNew', 'resolve']);
                             t.isTrue(fs.existsSync(canonicalDir));
-                            t.typeOf(pkgMeta, 'object');
-                            t.equal(pkgMeta.name, 'a');
-                            t.equal(pkgMeta.version, '0.2.2');
+                            t.typeOf(pkgmeta, 'object');
+                            t.equal(pkgmeta.name, 'a');
+                            t.equal(pkgmeta.version, '0.2.2');
                             next();
                         });
                 })
@@ -326,9 +326,9 @@ describe('Repository', function () {
                     return originalResolve.apply(this, arguments);
                 };
 
-                resolver.hasNew = function (canonicalDir, pkgMeta) {
+                resolver.hasNew = function (canonicalDir, pkgmeta) {
                     t.equal(canonicalDir, tempPackage);
-                    t.deepEqual(pkgMeta, json);
+                    t.deepEqual(pkgmeta, json);
                     called.push('hasNew');
                     return when.resolve(false);
                 };
@@ -343,10 +343,10 @@ describe('Repository', function () {
                     fs.writeFileSync(path.join(tempPackage, '.bower.json'), JSON.stringify(json));
 
                     return repository.fetch({ name: '', source: 'foo', target: '~0.2.0' })
-                        .spread(function (canonicalDir, pkgMeta) {
+                        .spread(function (canonicalDir, pkgmeta) {
                             t.deepEqual(called, ['hasNew']);
                             t.equal(canonicalDir, tempPackage);
-                            t.deepEqual(pkgMeta, json);
+                            t.deepEqual(pkgmeta, json);
                             next();
                         });
                 })
@@ -363,9 +363,9 @@ describe('Repository', function () {
             resolverFactoryHook = function (resolver) {
                 var originalResolve = resolver.resolve;
 
-                resolver.hasNew = function (canonicalDir, pkgMeta) {
+                resolver.hasNew = function (canonicalDir, pkgmeta) {
                     t.equal(canonicalDir, tempPackage);
-                    t.deepEqual(pkgMeta, json);
+                    t.deepEqual(pkgmeta, json);
                     called.push('resolve');
                     return originalResolve.apply(this, arguments);
                 };
@@ -386,10 +386,10 @@ describe('Repository', function () {
 
                     repository._config.offline = true;
                     return repository.fetch({ name: '', source: 'foo', target: '~0.2.0' })
-                        .spread(function (canonicalDir, pkgMeta) {
+                        .spread(function (canonicalDir, pkgmeta) {
                             t.equal(called.length, 0);
                             t.equal(canonicalDir, tempPackage);
-                            t.deepEqual(pkgMeta, json);
+                            t.deepEqual(pkgmeta, json);
                             next();
                         });
                 })
@@ -481,8 +481,8 @@ describe('Repository', function () {
                 _source: 'foo'
             };
 
-            repository._cache.eliminate = function (pkgMeta) {
-                t.deepEqual(pkgMeta, json);
+            repository._cache.eliminate = function (pkgmeta) {
+                t.deepEqual(pkgmeta, json);
                 called = true;
                 return when.resolve();
             };

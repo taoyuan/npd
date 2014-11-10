@@ -27,7 +27,7 @@ describe('action/install', function () {
     });
 
 
-    it.only('should throw error to install nothing and module.json dose not exist', function () {
+    it('should throw error to install nothing and module.json dose not exist', function () {
         where.prepare();
         return actions.install(where.path, []).catch(function (err) {
             assert.equal(err.code, 'ENOMODULEJSON');

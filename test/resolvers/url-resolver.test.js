@@ -234,11 +234,11 @@ describe('UrlResolver', function () {
         function assertMain(dir, singleFile) {
             return nfn.call(fs.readFile, path.join(dir, '.package.json'))
                 .then(function (contents) {
-                    var pkgMeta = JSON.parse(contents.toString());
+                    var pkgmeta = JSON.parse(contents.toString());
 
-                    t.equal(pkgMeta.main, singleFile);
+                    t.equal(pkgmeta.main, singleFile);
 
-                    return pkgMeta;
+                    return pkgmeta;
                 });
         }
 
@@ -552,8 +552,8 @@ describe('UrlResolver', function () {
             resolver.resolve()
                 .then(function (dir) {
                     assertMain(dir, 'index.js')
-                        .then(function (pkgMeta) {
-                            t.equal(pkgMeta._release, 'e-tag:686897696a');
+                        .then(function (pkgmeta) {
+                            t.equal(pkgmeta._release, 'e-tag:686897696a');
                             next();
                         });
                 })
@@ -601,8 +601,8 @@ describe('UrlResolver', function () {
             resolver.resolve()
                 .then(function (dir) {
                     assertMain(dir, 'index.js')
-                        .then(function (pkgMeta) {
-                            t.deepEqual(pkgMeta._cacheHeaders, {
+                        .then(function (pkgmeta) {
+                            t.deepEqual(pkgmeta._cacheHeaders, {
                                 'ETag': '686897696a7c876b7e',
                                 'Last-Modified': 'Tue, 15 Nov 2012 12:45:26 GMT'
                             });

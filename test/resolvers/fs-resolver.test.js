@@ -109,11 +109,11 @@ describe('FsResolver', function () {
         function assertMain(dir, singleFile) {
             return nfn.call(fs.readFile, path.join(dir, '.package.json'))
                 .then(function (contents) {
-                    var pkgMeta = JSON.parse(contents.toString());
+                    var pkgmeta = JSON.parse(contents.toString());
 
-                    t.equal(pkgMeta.main, singleFile);
+                    t.equal(pkgmeta.main, singleFile);
 
-                    return pkgMeta;
+                    return pkgmeta;
                 });
         }
 

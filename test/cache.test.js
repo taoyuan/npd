@@ -138,19 +138,19 @@ describe('Cache', function () {
         });
 
         it('should read the package meta if not present', function (next) {
-            var pkgMeta = path.join(tempPackage, '.package.json');
+            var pkgmeta = path.join(tempPackage, '.package.json');
 
             // Copy package.json to .package.json and add some props
-            copy.copyFile(path.join(tempPackage, 'package.json'), pkgMeta)
+            copy.copyFile(path.join(tempPackage, 'package.json'), pkgmeta)
                 .then(function () {
-                    return nfn.call(fs.readFile, pkgMeta)
+                    return nfn.call(fs.readFile, pkgmeta)
                         .then(function (contents) {
                             var json = JSON.parse(contents.toString());
 
                             json._target = '~0.2.0';
                             json._source = 'git://github.com/bower/test-package.git';
 
-                            return nfn.call(fs.writeFile, pkgMeta, JSON.stringify(json, null, '  '));
+                            return nfn.call(fs.writeFile, pkgmeta, JSON.stringify(json, null, '  '));
                         });
                 })
                 // Store as usual
@@ -183,9 +183,9 @@ describe('Cache', function () {
         });
 
         it('should error out when reading an invalid package meta', function (next) {
-            var pkgMeta = path.join(tempPackage, '.package.json');
+            var pkgmeta = path.join(tempPackage, '.package.json');
 
-            return nfn.call(fs.writeFile, pkgMeta, 'w00t')
+            return nfn.call(fs.writeFile, pkgmeta, 'w00t')
                 .then(function () {
                     return cache.store(tempPackage)
                         .then(function () {
@@ -478,16 +478,16 @@ describe('Cache', function () {
             fs.writeFileSync(path.join(sourceDir, '0.2.0', '.package.json'), JSON.stringify(json, null, '  '));
 
             cache.retrieve(source, '~0.1.0')
-                .spread(function (canonicalDir, pkgMeta) {
-                    t.typeOf(pkgMeta, 'object');
-                    t.equal(pkgMeta.version, '0.1.9');
+                .spread(function (canonicalDir, pkgmeta) {
+                    t.typeOf(pkgmeta, 'object');
+                    t.equal(pkgmeta.version, '0.1.9');
                     t.equal(canonicalDir, path.join(sourceDir, '0.1.9'));
 
                     return cache.retrieve(source, '*');
                 })
-                .spread(function (canonicalDir, pkgMeta) {
-                    t.typeOf(pkgMeta, 'object');
-                    t.equal(pkgMeta.version, '0.2.0');
+                .spread(function (canonicalDir, pkgmeta) {
+                    t.typeOf(pkgmeta, 'object');
+                    t.equal(pkgmeta.version, '0.2.0');
                     t.equal(canonicalDir, path.join(sourceDir, '0.2.0'));
 
                     next();
@@ -513,9 +513,9 @@ describe('Cache', function () {
             fs.writeFileSync(path.join(sourceDir, '0.1.0-rc.2', '.package.json'), JSON.stringify(json, null, '  '));
 
             cache.retrieve(source, '~0.1.0-rc')
-                .spread(function (canonicalDir, pkgMeta) {
-                    t.typeOf(pkgMeta, 'object');
-                    t.equal(pkgMeta.version, '0.1.0-rc.2');
+                .spread(function (canonicalDir, pkgmeta) {
+                    t.typeOf(pkgmeta, 'object');
+                    t.equal(pkgmeta.version, '0.1.0-rc.2');
                     t.equal(canonicalDir, path.join(sourceDir, '0.1.0-rc.2'));
 
                     next();
@@ -553,9 +553,9 @@ describe('Cache', function () {
             fs.writeFileSync(path.join(sourceDir, encoded, '.package.json'), JSON.stringify(json, null, '  '));
 
             cache.retrieve(source, '0.1.0+build.5')
-                .spread(function (canonicalDir, pkgMeta) {
-                    t.typeOf(pkgMeta, 'object');
-                    t.equal(pkgMeta.version, '0.1.0+build.5');
+                .spread(function (canonicalDir, pkgmeta) {
+                    t.typeOf(pkgmeta, 'object');
+                    t.equal(pkgmeta.version, '0.1.0+build.5');
                     t.equal(canonicalDir, path.join(sourceDir, encodeURIComponent('0.1.0+build.5')));
 
                     next();
@@ -576,8 +576,8 @@ describe('Cache', function () {
             fs.writeFileSync(path.join(sourceDir, '_wildcard', '.package.json'), JSON.stringify(json, null, '  '));
 
             cache.retrieve(source, '*')
-                .spread(function (canonicalDir, pkgMeta) {
-                    t.typeOf(pkgMeta, 'object');
+                .spread(function (canonicalDir, pkgmeta) {
+                    t.typeOf(pkgmeta, 'object');
                     t.equal(canonicalDir, path.join(sourceDir, '_wildcard'));
 
                     next();
@@ -601,9 +601,9 @@ describe('Cache', function () {
             fs.writeFileSync(path.join(sourceDir, 'other-branch', '.package.json'), JSON.stringify(json, null, '  '));
 
             cache.retrieve(source, 'some-branch')
-                .spread(function (canonicalDir, pkgMeta) {
-                    t.typeOf(pkgMeta, 'object');
-                    t.notProperty(pkgMeta, 'version');
+                .spread(function (canonicalDir, pkgmeta) {
+                    t.typeOf(pkgmeta, 'object');
+                    t.notProperty(pkgmeta, 'version');
 
                     next();
                 })
@@ -949,7 +949,7 @@ describe('Cache', function () {
                 .then(function (entries) {
                     t.typeOf(entries, 'array');
                     t.equal(entries.length, 1);
-                    t.deepEqual(entries[0].pkgMeta, json);
+                    t.deepEqual(entries[0].pkgmeta, json);
 
                     // Lurking file should have been removed
                     t.isFalse(fs.existsSync(path.join(cacheDir, 'foo')));
@@ -988,7 +988,7 @@ describe('Cache', function () {
                 .then(function (entries) {
                     t.typeOf(entries, 'array');
                     t.equal(entries.length, 1);
-                    t.deepEqual(entries[0].pkgMeta, json);
+                    t.deepEqual(entries[0].pkgmeta, json);
 
                     // Packages with invalid metas should have been removed
                     t.isFalse(fs.existsSync(path.join(sourceDir, '0.0.1')));

@@ -180,9 +180,9 @@ describe('Resolver', function () {
             var canonical;
             var meta;
 
-            resolver._hasNew = function (canonicalDir, pkgMeta) {
+            resolver._hasNew = function (canonicalDir, pkgmeta) {
                 canonical = canonicalDir;
-                meta = pkgMeta;
+                meta = pkgmeta;
                 return when.resolve(true);
             };
 
@@ -200,8 +200,8 @@ describe('Resolver', function () {
             var resolver = create('foo');
             var meta;
 
-            resolver._hasNew = function (canonicalDir, pkgMeta) {
-                meta = pkgMeta;
+            resolver._hasNew = function (canonicalDir, pkgmeta) {
+                meta = pkgmeta;
                 return when.resolve(true);
             };
 
