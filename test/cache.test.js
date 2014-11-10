@@ -850,7 +850,7 @@ describe('Cache', function () {
                 .done();
         });
 
-        it('should resolve to an ordered array of entries (name ASC, release ASC)', function (next) {
+        it('should resolve to an ordered array of entries (name ASC, release ASC)', function () {
             var source = 'list-package-1';
             var sourceId = md5(source);
             var sourceDir = path.join(cacheDir, sourceId);
@@ -899,7 +899,7 @@ describe('Cache', function () {
             json.version = '0.2.0';
             fs.writeFileSync(path.join(sourceDir2, '0.2.0', '.package.json'), JSON.stringify(json, null, '  '));
 
-            cache.list()
+            return cache.list()
                 .then(function (entries) {
                     var expectedJson;
                     var bowerDir = path.join(__dirname, './..');
@@ -918,10 +918,7 @@ describe('Cache', function () {
 
                     json = JSON.stringify(entries, null, '  ');
                     t.equal(json, expectedJson);
-
-                    next();
-                })
-                .done();
+                });
         });
 
         it('should ignore lurking files where dirs are expected', function (next) {

@@ -1,7 +1,6 @@
 {
     "node": true,
     "devel": true,
-
     "bitwise": false,
     "curly": false,
     "eqeqeq": true,
@@ -15,7 +14,6 @@
     "plusplus": false,
     "undef": true,
     "unused": false,
-//    "quotmark": "single",
     "strict": false,
     "trailing": true,
     "camelcase": false,
@@ -40,10 +38,10 @@
     "sub": false,
     "supernew": true,
     "validthis": false,
-
     "nomen": false,
     "white": true,
     "globals": {
+        "Promise": true,
         "describe": false,
         "it": false,
         "suite": false,

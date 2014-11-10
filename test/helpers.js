@@ -133,7 +133,7 @@ TempDir.prototype.glob = function (pattern) {
 TempDir.prototype.git = function () {
     var args = Array.prototype.slice.call(arguments);
 
-    return sh.execSync('git', args, { cwd: this.path, env: env, silent: false });
+    return sh.execSync('git', args, { cwd: this.path, env: env });
 };
 
 TempDir.prototype.read = function () {

@@ -31,7 +31,7 @@ describe('action/install', function () {
         where.prepare();
         return actions.install(where.path, []).catch(function (err) {
             assert.equal(err.code, 'ENOMODULEJSON');
-        })
+        });
     });
 
     it('should install modules specified', function () {

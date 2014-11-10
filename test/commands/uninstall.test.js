@@ -6,7 +6,7 @@ var fs = require('fs-extra');
 var npd = require('../../lib/npd');
 var h = require('../helpers');
 
-describe.only('command/uninstall', function () {
+describe('command/uninstall', function () {
     var repo, pkg;
     var install, uninstall;
 
