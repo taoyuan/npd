@@ -10,7 +10,7 @@ var sh = require('../lib/utils/sh');
 var copy = require('../lib/utils/copy');
 var md5 = require('../lib/utils/md5');
 
-describe('Cache', function () {
+describe.only('Cache', function () {
     var cache;
     var testPackage = path.resolve(__dirname, './fixtures/package-a');
     var tempPackage = path.resolve(__dirname, './tmp/temp-package');
@@ -29,7 +29,7 @@ describe('Cache', function () {
         }));
 
         // Checkout test package version 0.2.0
-        sh.exec('git', ['checkout', '0.2.0'], { cwd: testPackage })
+        sh.exec('git', ['checkout', '0.2.0'], {cwd: testPackage})
             .then(next.bind(next, null), next);
     });
 
@@ -81,7 +81,7 @@ describe('Cache', function () {
 
             // Create a fresh copy of the test package into temp
             fs.removeSync(tempPackage);
-            copy.copyDir(testPackage, tempPackage, { ignore: ['.git'] })
+            copy.copyDir(testPackage, tempPackage, {ignore: ['.git']})
                 .then(next.bind(next, null), next);
         });
 
@@ -238,7 +238,7 @@ describe('Cache', function () {
             cache.versions('test-in-memory')
                 // Copy temp package to temp package  2
                 .then(function () {
-                    return copy.copyDir(tempPackage, tempPackage2, { ignore: ['.git'] });
+                    return copy.copyDir(tempPackage, tempPackage2, {ignore: ['.git']});
                 })
                 // Store the two packages
                 .then(function () {
@@ -452,7 +452,7 @@ describe('Cache', function () {
             var source = String(Math.random());
             var sourceId = md5(source);
             var sourceDir = path.join(cacheDir, sourceId);
-            var json = { name: 'foo' };
+            var json = {name: 'foo'};
 
             // Create some versions
             fs.mkdirSync(sourceDir);
@@ -499,7 +499,7 @@ describe('Cache', function () {
             var source = String(Math.random());
             var sourceId = md5(source);
             var sourceDir = path.join(cacheDir, sourceId);
-            var json = { name: 'foo' };
+            var json = {name: 'foo'};
 
             // Create some versions
             fs.mkdirSync(sourceDir);
@@ -527,7 +527,7 @@ describe('Cache', function () {
             var source = String(Math.random());
             var sourceId = md5(source);
             var sourceDir = path.join(cacheDir, sourceId);
-            var json = { name: 'foo' };
+            var json = {name: 'foo'};
             var encoded;
 
             // Create some versions
@@ -567,7 +567,7 @@ describe('Cache', function () {
             var source = String(Math.random());
             var sourceId = md5(source);
             var sourceDir = path.join(cacheDir, sourceId);
-            var json = { name: 'foo' };
+            var json = {name: 'foo'};
 
             // Create some versions
             fs.mkdirSync(sourceDir);
@@ -589,7 +589,7 @@ describe('Cache', function () {
             var source = String(Math.random());
             var sourceId = md5(source);
             var sourceDir = path.join(cacheDir, sourceId);
-            var json = { name: 'foo' };
+            var json = {name: 'foo'};
 
             // Create some versions
             fs.mkdirSync(sourceDir);
@@ -755,19 +755,14 @@ describe('Cache', function () {
             fs.mkdirpSync(cacheDir);
         });
 
-        it('should empty the whole cache folder', function (next) {
+        it('should empty the whole cache folder', function () {
             cache.clear()
-                .then(function () {
-                    var files;
+            var files;
 
-                    t.isTrue(fs.existsSync(cacheDir));
+            t.isTrue(fs.existsSync(cacheDir));
 
-                    files = fs.readdirSync(cacheDir);
-                    t.equal(files.length, 0);
-
-                    next();
-                })
-                .done();
+            files = fs.readdirSync(cacheDir);
+            t.equal(files.length, 0);
         });
 
         it('should erase the in-memory cache', function (next) {
