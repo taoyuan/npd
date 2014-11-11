@@ -10,7 +10,7 @@ var sh = require('../lib/utils/sh');
 var copy = require('../lib/utils/copy');
 var md5 = require('../lib/utils/md5');
 
-describe.only('Cache', function () {
+describe('Cache', function () {
     var cache;
     var testPackage = path.resolve(__dirname, './fixtures/package-a');
     var tempPackage = path.resolve(__dirname, './tmp/temp-package');
@@ -756,7 +756,7 @@ describe.only('Cache', function () {
         });
 
         it('should empty the whole cache folder', function () {
-            cache.clear()
+            cache.clear();
             var files;
 
             t.isTrue(fs.existsSync(cacheDir));
