@@ -155,25 +155,6 @@ describe('command/install', function () {
         });
     });
 
-    it('should link bins to global', function () {
-        pkg.prepare({
-            'package.json': {
-                name: 'package',
-                bin: {
-                    'npd-bin-test': './npd-bin-test.js'
-                }
-            },
-            'npd-bin-test.js': 'console.log("npd bin test");'
-        });
-
-        repo.prepare();
-
-        return install([pkg.path], {prefix: repo.path, global: true}).then(function () {
-            t.isTrue(fs.existsSync(path.join(npd.config.bin, 'npd-bin-test')));
-            t.isTrue(fs.existsSync(path.join(npd.config.dir, 'package')));
-        });
-    });
-
     it('should install to custom local prefix', function () {
         pkg.prepare({
             'package.json': {
@@ -192,4 +173,60 @@ describe('command/install', function () {
             t.isTrue(repo.exists('modules/package'));
         });
     });
+
+    describe('global', function () {
+        it('should link bins to global', function () {
+            pkg.prepare({
+                'package.json': {
+                    name: 'package',
+                    bin: {
+                        'npd-bin-test': './npd-bin-test.js'
+                    }
+                },
+                'npd-bin-test.js': 'console.log("npd bin test");'
+            });
+
+            repo.prepare();
+
+            return install([pkg.path], {prefix: repo.path, global: true}).then(function () {
+                t.isTrue(fs.existsSync(path.join(npd.config.bin, 'npd-bin-test')));
+                t.isTrue(fs.existsSync(path.join(npd.config.dir, 'package')));
+            });
+        });
+
+        it('should work for sub modules', function () {
+            var submod = new h.TempDir({
+                'package.json': {
+                    name: 'submod'
+                }
+            }).prepare();
+
+            var mod1 = new h.TempDir({
+                'package.json': {
+                    name: 'mod1'
+                }
+            }).prepare();
+
+            var mod2 = new h.TempDir({
+                'module.json': {
+                    'extensions': {
+                        'submod': submod.path
+                    }
+                },
+                'package.json': {
+                    name: 'mod2'
+                }
+            }).prepare();
+
+            var globaldir = new h.TempDir().prepare();
+
+            npd.load({global: true, prefix: globaldir.path});
+
+            return install([mod1.path, mod2.path]).then(function () {
+                t.isTrue(globaldir.exists('silo/mod1'));
+                t.isTrue(globaldir.exists('silo/mod2'));
+                t.isTrue(globaldir.exists('silo/mod2/modules/submod'));
+            });
+        })
+    })
 });
