@@ -227,6 +227,6 @@ describe('command/install', function () {
                 t.isTrue(globaldir.exists('silo/mod2'));
                 t.isTrue(globaldir.exists('silo/mod2/modules/submod'));
             });
-        })
-    })
+        });
+    });
 });
