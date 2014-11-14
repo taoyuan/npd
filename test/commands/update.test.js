@@ -134,7 +134,7 @@ describe('command/update', function () {
     });
 
 
-    it('should update a package to latest version', function () {
+    it('should update all package to latest version', function () {
         repo.prepare();
         gitInitialCommit();
         return install([gitpkg.path], _.assign({ prefix: repo.path }, opts)).then(function () {
@@ -143,6 +143,22 @@ describe('command/update', function () {
             t.isFalse(repo.exists('modules/.bin/npd-b'));
             gitUpdateCommit();
             return update().then(function () {
+                t.include(repo.read('modules/package/version.txt'), '1.0.1');
+                t.isFalse(repo.exists('modules/.bin/npd-a'));
+                t.isTrue(repo.exists('modules/.bin/npd-b'));
+            });
+        });
+    });
+
+    it('should update a specific package to latest version', function () {
+        repo.prepare();
+        gitInitialCommit();
+        return install([gitpkg.path], _.assign({ prefix: repo.path }, opts)).then(function () {
+            t.include(repo.read('modules/package/version.txt'), '1.0.0');
+            t.isTrue(repo.exists('modules/.bin/npd-a'));
+            t.isFalse(repo.exists('modules/.bin/npd-b'));
+            gitUpdateCommit();
+            return update(['package']).then(function () {
                 t.include(repo.read('modules/package/version.txt'), '1.0.1');
                 t.isFalse(repo.exists('modules/.bin/npd-a'));
                 t.isTrue(repo.exists('modules/.bin/npd-b'));
