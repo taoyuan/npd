@@ -10,7 +10,7 @@ $ npm install npd -g
 
 ## Documentation
 
-_(Coming soon)_
+`npd` is like `npm` and `bower`, it helps you deploy applications to focus on maintain versions, but not to create auto startup scripts.
 
 ## Examples
 
