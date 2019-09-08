@@ -1,5 +1,7 @@
 # npd [![NPM Version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url]
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/taoyuan/npd.svg)](https://greenkeeper.io/)
+
 > Node Packages Deployer
 
 ## Installation
